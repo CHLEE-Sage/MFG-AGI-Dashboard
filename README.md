@@ -1,52 +1,118 @@
-﻿# SageVego — 本地 AGI 推理伺服器 · 封測廠部署包
+# MFG AGI Dashboard
 
-> Dell Pro Max Tower T2 + NVIDIA RTX PRO 6000 96GB · Qwen3.6-35B-A3B FP8
+A web-based AI assistant portal for semiconductor assembly & test (OSAT) manufacturing engineers, powered by Claude API and deployed on Vercel.
 
-## 📦 檔案說明
+**Live:** [mfg.sagevelo.com](https://mfg.sagevelo.com)
 
-| 檔案 | 說明 |
-|------|------|
-| `manufacturing-AGI-portal.html` | 製造業 AGI 入口網站（主要交付物）|
-| `manufacturing_llm_applications.html` | 製造業 LLM 應用地圖 |
-| `docker-compose.yml` | 完整生產 Docker Compose 配置 |
-| `.env.example` | 環境變數範本（複製為 `.env` 後填入實際值）|
-| `nginx-dify.conf` | Nginx 反向代理設定（Dify）|
-| `部署手冊.md` | Step-by-step 安裝指南（給管理員）|
-| `工程師使用指南.md` | AGI 助手使用說明（給工廠工程師）|
-| `AGI-Server-Index.md` | 系統架構索引 |
+---
 
-## 🏗️ 架構概覽
+## Features
 
-\`\`\`
-LAYER 1 — 推理引擎
-  vLLM :8000        ← 生產推理（Qwen3.6-35B-A3B FP8）
-  Ollama :11434     ← 開發測試
+### Role-Based Access
+Engineers select their role on entry, which customizes the interface and available tools:
+- 製程工程師 (Process Engineer)
+- 設備工程師 (Equipment Engineer)
+- 品質工程師 (Quality Engineer)
+- 管理員 (Admin)
 
-LAYER 2 — 介面 & 編排
-  Open WebUI :8080  ← 工程師聊天入口
-  Dify :3000        ← Agent 建構平台
-  n8n :5678         ← 自動化工作流程
+### 6 AI Agents
+Each agent is specialized for a different manufacturing workflow:
 
-LAYER 3 — 記憶 & 知識
-  Qdrant :6333      ← 向量資料庫
-  Mem0 :8888        ← 長期跨 session 記憶
-\`\`\`
+| Agent | Function |
+|-------|----------|
+| 製程工程師助手 | Process parameters, DOE recommendations, SOP Q&A |
+| RCA 分析助手 | Root cause analysis with 9-agent pipeline |
+| 良率報告助手 | Yield trend reports, WAT/CPK analysis, MRAT summaries |
+| 設備維護助手 | Wire Bonder / Die Attach fault diagnosis, PM SOP |
+| 技術文獻搜尋 | Technical literature search, JEDEC/AEC spec lookup |
+| 程式碼助手 | Python data analysis, SQL queries, WAT box plot generation |
 
-## 🚀 快速啟動
+### Dashboard
+- Real-time yield monitoring (Mobile / MCU A10 process lines)
+- 9-Agent RCA pipeline queue and status
+- Knowledge base document management
+- Automated yield reports
 
-\`\`\`bash
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Vanilla HTML/CSS/JavaScript |
+| AI Backend | Claude API (`claude-3-5-sonnet-20241022`) |
+| API Layer | Vercel Serverless Functions (`/api/chat.js`) |
+| Hosting | Vercel |
+| Domain | Squarespace DNS → `mfg.sagevelo.com` |
+
+---
+
+## Project Structure
+
+```
+/
+├── index.html                    # Main portal (entry point)
+├── manufacturing-ai-portal.html  # Source file (synced to index.html)
+├── manufacturing_llm_applications.html  # LLM application map
+├── api/
+│   └── chat.js                   # Vercel serverless function → Claude API
+├── docker-compose.yml            # Local inference server config (optional)
+├── nginx-dify.conf               # Nginx reverse proxy config
+├── .env.example                  # Environment variable template
+├── 部署手冊.md                   # Deployment guide (admin)
+└── 工程師使用指南.md             # User guide (engineers)
+```
+
+---
+
+## Environment Variables
+
+Set the following in Vercel Dashboard → Settings → Environment Variables:
+
+| Variable | Description |
+|----------|-------------|
+| `CLAUDE_API_KEY` | Anthropic API key (`sk-ant-...`) |
+
+---
+
+## Local Development
+
+1. Clone the repo
+2. Open `index.html` directly in a browser for UI preview (chat won't work without API)
+3. For full functionality, deploy to Vercel with `CLAUDE_API_KEY` set
+
+---
+
+## API Endpoint
+
+`POST /api/chat`
+
+**Request:**
+```json
+{
+  "messages": [{ "role": "user", "content": "..." }],
+  "systemPrompt": "You are a process engineer assistant..."
+}
+```
+
+**Response:** Claude API message object
+
+---
+
+## Optional: Local Inference Server
+
+For air-gapped factory deployments, `docker-compose.yml` provides a full local stack:
+
+```
+vLLM :8000       ← Production inference (Qwen3.6-35B-A3B FP8)
+Open WebUI :8080 ← Engineer chat interface
+Dify :3000       ← Agent builder
+Qdrant :6333     ← Vector database
+Mem0 :8888       ← Long-term memory
+```
+
+```bash
 cp .env.example .env
-# 編輯 .env，填入 SERVER_IP、HF_TOKEN 等變數
+# Fill in SERVER_IP, HF_TOKEN, etc.
 docker compose up -d
-\`\`\`
-
-## 🔗 Manufacturing AGI Portal
-
-開啟 `manufacturing-AGI-portal.html` 可直接在瀏覽器使用，或部署至內網 Web Server。
-
-功能包含：
-- 角色選擇（製程 / 設備 / 品質 / 管理員）
-- 6 種 AGI 助手（製程、RCA、良率、設備、文獻、程式碼）
-- 9-Agent RCA Pipeline 監控
-- 良率趨勢自動報告
-- 知識庫管理
+```
