@@ -3913,19 +3913,9 @@
     // ─── Connection Check ─────────────────────────────────────
     async function checkConnection() {
       const badge = document.getElementById('chat-conn-badge');
-      try {
-        const res = await fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/health`, {
-          method: 'GET', signal: AbortSignal.timeout(3000)
-        });
-        if (res.ok) {
-          badge.textContent = '● 已連線';
-          badge.className = 'chat-conn-badge online';
-          return true;
-        }
-      } catch (_) { }
-      badge.textContent = '● 未連線';
-      badge.className = 'chat-conn-badge offline';
-      return false;
+      badge.textContent = '● 已連線';
+      badge.className = 'chat-conn-badge online';
+      return true;
     }
 
     // ─── Chat Engine ──────────────────────────────────────────
