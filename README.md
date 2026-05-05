@@ -65,54 +65,8 @@ Each agent is specialized for a different manufacturing workflow:
 
 ---
 
-## Environment Variables
-
-Set the following in Vercel Dashboard → Settings → Environment Variables:
-
-| Variable | Description |
-|----------|-------------|
-| `CLAUDE_API_KEY` | Anthropic API key (`sk-ant-...`) |
-
----
-
 ## Local Development
 
 1. Clone the repo
 2. Open `index.html` directly in a browser for UI preview (chat won't work without API)
 3. For full functionality, deploy to Vercel with `CLAUDE_API_KEY` set
-
----
-
-## API Endpoint
-
-`POST /api/chat`
-
-**Request:**
-```json
-{
-  "messages": [{ "role": "user", "content": "..." }],
-  "systemPrompt": "You are a process engineer assistant..."
-}
-```
-
-**Response:** Claude API message object
-
----
-
-## Optional: Local Inference Server
-
-For air-gapped factory deployments, `docker-compose.yml` provides a full local stack:
-
-```
-vLLM :8000       ← Production inference (Qwen3.6-35B-A3B FP8)
-Open WebUI :8080 ← Engineer chat interface
-Dify :3000       ← Agent builder
-Qdrant :6333     ← Vector database
-Mem0 :8888       ← Long-term memory
-```
-
-```bash
-cp .env.example .env
-# Fill in SERVER_IP, HF_TOKEN, etc.
-docker compose up -d
-```
