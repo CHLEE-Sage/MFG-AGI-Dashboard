@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: transparent;
+  color: #1a1a1a;
+  font-size: 13px;
+  padding: 16px;
+}
+h1 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.subtitle { font-size: 11px; color: #666; margin-bottom: 14px; }
+
+/* Category grid */
+.grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+
+.cat {
+  border: 1.5px solid #e4e4e7;
+  border-radius: 9px;
+  padding: 10px 11px;
+  background: #fafafa;
+}
+.cat-header {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 7px;
+}
+.cat-icon { font-size: 15px; }
+.cat-title { font-weight: 700; font-size: 12px; }
+.cat-sub { font-size: 10px; color: #888; }
+
+.app-row {
+  display: flex; align-items: flex-start;
+  gap: 5px; margin-bottom: 4px;
+}
+.app-name { font-size: 11.5px; color: #333; flex: 1; line-height: 1.35; }
+.pill {
+  font-size: 9.5px; padding: 1px 5px; border-radius: 99px;
+  white-space: nowrap; font-weight: 600; flex-shrink: 0;
+}
+.pill.high  { background: #dcfce7; color: #15803d; }
+.pill.mid   { background: #fef9c3; color: #854d0e; }
+.pill.vision{ background: #ede9fe; color: #6d28d9; }
+.pill.new   { background: #fee2e2; color: #b91c1c; }
+
+/* ROI table */
+.section-title { font-size: 12px; font-weight: 700; color: #333; margin: 0 0 6px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-bottom: 12px; }
+th { background: #f4f4f5; text-align: left; padding: 5px 8px; font-weight: 600; color: #555; }
+td { padding: 5px 8px; border-bottom: 1px solid #f0f0f0; vertical-align: top; line-height: 1.4; }
+.star { color: #f59e0b; }
+.tag2 { font-size: 9.5px; background: #f0f0f0; border-radius: 4px; padding: 1px 5px; color: #555; }
+
+/* Legend */
+.legend { display: flex; gap: 10px; flex-wrap: wrap; font-size: 10.5px; color: #555; margin-bottom: 10px; }
+.legend span { display: flex; align-items: center; gap: 4px; }
+</style>
+</head>
+<body>
+
+<h1>製造業 本地 LLM 應用地圖</h1>
+<p class="subtitle">適用封測廠 / 精密製造 — 依領域分類</p>
+
+<div class="legend">
+  <span><span class="pill high">高ROI</span> 快速見效</span>
+  <span><span class="pill mid">中ROI</span> 需整合</span>
+  <span><span class="pill vision">視覺</span> 需多模態模型</span>
+  <span><span class="pill new">新興</span> 實驗性</span>
+</div>
+
+<div class="grid">
+
+  <!-- 品質 & 良率 -->
+  <div class="cat">
+    <div class="cat-header">
+      <span class="cat-icon">🔬</span>
+      <div><div class="cat-title">品質 & 良率</div><div class="cat-sub">你已規劃的核心領域</div></div>
+    </div>
+    <div class="app-row"><span class="app-name">RCA 根因分析</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">良率趨勢報告自動生成</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">WAT/CPK 異常解讀</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">Defect 圖像分類說明</span><span class="pill vision">視覺</span></div>
+    <div class="app-row"><span class="app-name">8D 報告自動起草</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">客戶抱怨分析 & 回覆</span><span class="pill mid">中ROI</span></div>
+  </div>
+
+  <!-- 設備 & 維護 -->
+  <div class="cat">
+    <div class="cat-header">
+      <span class="cat-icon">⚙️</span>
+      <div><div class="cat-title">設備 & 維護</div><div class="cat-sub">PM / 故障 / 停機</div></div>
+    </div>
+    <div class="app-row"><span class="app-name">設備故障診斷助手</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">PM SOP 問答 & 引導</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">停機記錄自動分類</span><span class="pill mid">中ROI</span></div>
+    <div class="app-row"><span class="app-name">備品預測 & 採購建議</span><span class="pill mid">中ROI</span></div>
+    <div class="app-row"><span class="app-name">維修工單自動生成</span><span class="pill mid">中ROI</span></div>
+    <div class="app-row"><span class="app-name">Alarm log 異常摘要</span><span class="pill high">高ROI</span></div>
+  </div>
+
+  <!-- 製程工程 -->
+  <div class="cat">
+    <div class="cat-header">
+      <span class="cat-icon">📐</span>
+      <div><div class="cat-title">製程工程</div><div class="cat-sub">參數 / DOE / FMEA</div></div>
+    </div>
+    <div class="app-row"><span class="app-name">製程參數查詢助手</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">DOE 設計 & 結果解讀</span><span class="pill mid">中ROI</span></div>
+    <div class="app-row"><span class="app-name">FMEA 條目自動生成</span><span class="pill mid">中ROI</span></div>
+    <div class="app-row"><span class="app-name">ECN 變更影響分析</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">製程偏差自動通知摘要</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">新製程知識萃取</span><span class="pill mid">中ROI</span></div>
+  </div>
+
+  <!-- 知識管理 -->
+  <div class="cat">
+    <div class="cat-header">
+      <span class="cat-icon">📚</span>
+      <div><div class="cat-title">知識管理</div><div class="cat-sub">SOP / 培訓 / 傳承</div></div>
+    </div>
+    <div class="app-row"><span class="app-name">SOP RAG 問答系統</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">老師傅知識萃取訪談</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">教育訓練題目自動生成</span><span class="pill mid">中ROI</span></div>
+    <div class="app-row"><span class="app-name">跨班交接摘要</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">歷史異常案例搜尋</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">多語言 SOP 翻譯</span><span class="pill mid">中ROI</span></div>
+  </div>
+
+  <!-- 法規 & 合規 -->
+  <div class="cat">
+    <div class="cat-header">
+      <span class="cat-icon">📋</span>
+      <div><div class="cat-title">法規 & 合規</div><div class="cat-sub">稽核 / 客戶需求</div></div>
+    </div>
+    <div class="app-row"><span class="app-name">IATF/ISO 稽核準備助手</span><span class="pill mid">中ROI</span></div>
+    <div class="app-row"><span class="app-name">客戶特殊要求 (CSR) 解析</span><span class="pill high">高ROI</span></div>
+    <div class="app-row"><span class="app-name">PPAP 文件生成輔助</span><span class="pill mid">中ROI</span></div>
+    <div class="app-row"><span class="app-name">環境法規符合性查核</span><span class="pill mid">中ROI</span></div>
+    <div class="app-row"><span class="app-name">不符合項自動追蹤</span><span class="pill mid">中ROI</span></div>
+  </div>
+
+  <!-- 新興 / 進階 -->
+  <div class="cat">
+    <div class="cat-header">
+      <span class="cat-icon">🚀</span>
+      <div><div class="cat-title">新興 / 進階</div><div class="cat-sub">多模態 / Agentic</div></div>
+    </div>
+    <div class="app-row"><span class="app-name">Wafer Map 異常解讀</span><span class="pill vision">視覺</span></div>
+    <div class="app-row"><span class="app-name">設備影像異常偵測說明</span><span class="pill vision">視覺</span></div>
+    <div class="app-row"><span class="app-name">自動化數據分析 Agent</span><span class="pill new">新興</span></div>
+    <div class="app-row"><span class="app-name">供應商品質評分助手</span><span class="pill mid">中ROI</span></div>
+    <div class="app-row"><span class="app-name">生產排程語意查詢</span><span class="pill new">新興</span></div>
+    <div class="app-row"><span class="app-name">即時字幕翻譯（多語廠）</span><span class="pill new">新興</span></div>
+  </div>
+
+</div>
+
+<!-- Quick win table -->
+<div class="section-title">🎯 建議優先順序（封測廠情境）</div>
+<table>
+  <tr>
+    <th>優先級</th><th>應用</th><th>為什麼先做</th><th>技術需求</th>
+  </tr>
+  <tr>
+    <td><span class="star">★★★</span></td>
+    <td>SOP RAG 問答 + 跨班交接摘要</td>
+    <td>立即減少工程師查文件時間，低風險</td>
+    <td><span class="tag2">Dify KB</span> <span class="tag2">Chat</span></td>
+  </tr>
+  <tr>
+    <td><span class="star">★★★</span></td>
+    <td>Alarm log / 停機記錄自動摘要</td>
+    <td>大量結構化文字，LLM 最擅長，直接節省整理時間</td>
+    <td><span class="tag2">Event trigger</span> <span class="tag2">n8n</span></td>
+  </tr>
+  <tr>
+    <td><span class="star">★★★</span></td>
+    <td>8D 報告自動起草</td>
+    <td>每張 8D 省 2-3 小時，ROI 極高且可量化</td>
+    <td><span class="tag2">Template</span> <span class="tag2">RAG</span></td>
+  </tr>
+  <tr>
+    <td><span class="star">★★☆</span></td>
+    <td>ECN 變更影響分析</td>
+    <td>避免變更遺漏影響製程，風險管控</td>
+    <td><span class="tag2">RAG</span> <span class="tag2">Multi-doc</span></td>
+  </tr>
+  <tr>
+    <td><span class="star">★★☆</span></td>
+    <td>老師傅知識萃取</td>
+    <td>解決技術斷層問題，長期價值極高</td>
+    <td><span class="tag2">Chat</span> <span class="tag2">Mem0</span></td>
+  </tr>
+  <tr>
+    <td><span class="star">★☆☆</span></td>
+    <td>Wafer Map 視覺解讀</td>
+    <td>需要多模態模型，目前 Qwen3.6 無視覺</td>
+    <td><span class="tag2">需 LLaVA / Gemma Vision</span></td>
+  </tr>
+</table>
+
+</body>
+</html>

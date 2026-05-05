@@ -1,0 +1,3201 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manufacturing AI Portal — 封測廠智慧製造平台</title>
+  <style>
+    /* ============================================================
+   設計系統 — CSS Variables
+   ============================================================ */
+    :root {
+      --brand-900: #0f172a;
+      --brand-800: #1e293b;
+      --brand-700: #334155;
+      --brand-500: #1d4ed8;
+      --brand-400: #3b82f6;
+      --brand-100: #dbeafe;
+
+      --green-500: #10b981;
+      --green-100: #d1fae5;
+      --amber-500: #f59e0b;
+      --amber-100: #fef3c7;
+      --red-500: #ef4444;
+      --red-100: #fee2e2;
+      --purple-500: #8b5cf6;
+      --purple-100: #ede9fe;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --slate-50: #f8fafc;
+
+      --sidebar-w: 220px;
+      --header-h: 52px;
+      --radius: 8px;
+      --shadow: 0 1px 4px rgba(0, 0, 0, .08), 0 4px 12px rgba(0, 0, 0, .05);
+    }
+
+    /* ── Reset ── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif;
+      background: var(--slate-100);
+      color: var(--brand-900);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    button {
+      cursor: pointer;
+      font: inherit;
+      border: none;
+    }
+
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ============================================================
+   Role Selection Screen
+   ============================================================ */
+    #role-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, var(--brand-900) 0%, #162032 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      gap: 32px;
+    }
+
+    #role-screen.hidden {
+      display: none;
+    }
+
+    .role-logo {
+      text-align: center;
+      color: #fff;
+    }
+
+    .role-logo h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .role-logo p {
+      font-size: 13px;
+      color: var(--slate-400);
+      margin-top: 4px;
+    }
+
+    .role-logo .badge {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 2px 10px;
+      background: rgba(59, 130, 246, .2);
+      border: 1px solid rgba(59, 130, 246, .4);
+      border-radius: 99px;
+      font-size: 11px;
+      color: var(--brand-400);
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: min(900px, 94vw);
+    }
+
+    .role-card {
+      background: rgba(255, 255, 255, .06);
+      border: 1.5px solid rgba(255, 255, 255, .1);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .18s ease;
+      color: #fff;
+    }
+
+    .role-card:hover {
+      background: rgba(255, 255, 255, .12);
+      border-color: rgba(59, 130, 246, .6);
+      transform: translateY(-3px);
+    }
+
+    .role-card .icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .role-card .title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .role-card .desc {
+      font-size: 11px;
+      color: var(--slate-400);
+      line-height: 1.4;
+    }
+
+    .role-card .apps {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    .role-card .app-pill {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, .08);
+      color: var(--slate-400);
+    }
+
+    /* ============================================================
+   App Shell
+   ============================================================ */
+    #app {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #app.hidden {
+      display: none;
+    }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--brand-900);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-logo {
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .sidebar-logo .name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .sidebar-logo .sub {
+      font-size: 10px;
+      color: var(--slate-400);
+      margin-top: 1px;
+    }
+
+    .role-indicator {
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, .04);
+      border-bottom: 1px solid rgba(255, 255, 255, .06);
+      font-size: 11px;
+      color: var(--slate-400);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .role-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .nav-section {
+      padding: 10px 0 4px;
+    }
+
+    .nav-label {
+      padding: 0 14px 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .3);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 14px;
+      margin: 0 6px;
+      border-radius: 7px;
+      cursor: pointer;
+      color: rgba(255, 255, 255, .6);
+      font-size: 13px;
+      transition: all .12s;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, .07);
+      color: #fff;
+    }
+
+    .nav-item.active {
+      background: var(--brand-500);
+      color: #fff;
+    }
+
+    .nav-item .nav-icon {
+      font-size: 15px;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .nav-item .badge-num {
+      margin-left: auto;
+      background: var(--red-500);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 99px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 12px 14px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .server-status {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      color: var(--slate-400);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse 2s infinite;
+    }
+
+    .status-dot.online {
+      background: var(--green-500);
+    }
+
+    .status-dot.offline {
+      background: var(--red-500);
+      animation: none;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .4
+      }
+    }
+
+    /* ── Header ── */
+    #header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: var(--header-h);
+      background: #fff;
+      border-bottom: 1px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+    }
+
+    .header-title {
+      font-size: 15px;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      background: var(--slate-100);
+      border: 1px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--brand-700);
+      transition: background .12s;
+    }
+
+    .icon-btn:hover {
+      background: var(--slate-200);
+    }
+
+    .switch-role-btn {
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--slate-100);
+      border: 1px solid var(--slate-200);
+      color: var(--brand-700);
+      transition: all .12s;
+    }
+
+    .switch-role-btn:hover {
+      background: var(--slate-200);
+    }
+
+    /* ── Main Content ── */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    /* Page visibility */
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* ============================================================
+   Shared Components
+   ============================================================ */
+
+    /* Card */
+    .card {
+      background: #fff;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brand-800);
+    }
+
+    .card-action {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--brand-400);
+      background: none;
+      padding: 3px 8px;
+      border-radius: 5px;
+    }
+
+    .card-action:hover {
+      background: var(--brand-100);
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    /* Stat card */
+    .stat-card {
+      background: #fff;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--slate-400);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--brand-900);
+      line-height: 1;
+    }
+
+    .stat-sub {
+      font-size: 11px;
+      color: var(--slate-400);
+      margin-top: 4px;
+    }
+
+    .stat-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+      margin-top: 6px;
+    }
+
+    .stat-badge.green {
+      background: var(--green-100);
+      color: #065f46;
+    }
+
+    .stat-badge.amber {
+      background: var(--amber-100);
+      color: #78350f;
+    }
+
+    .stat-badge.red {
+      background: var(--red-100);
+      color: #7f1d1d;
+    }
+
+    .stat-badge.blue {
+      background: var(--brand-100);
+      color: #1e3a8a;
+    }
+
+    /* Status pill */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+
+    .pill.running {
+      background: var(--brand-100);
+      color: #1e3a8a;
+    }
+
+    .pill.done {
+      background: var(--green-100);
+      color: #065f46;
+    }
+
+    .pill.failed {
+      background: var(--red-100);
+      color: #7f1d1d;
+    }
+
+    .pill.waiting {
+      background: var(--amber-100);
+      color: #78350f;
+    }
+
+    .pill.idle {
+      background: var(--slate-100);
+      color: var(--slate-400);
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      background: var(--slate-200);
+      border-radius: 99px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 99px;
+      transition: width .4s ease;
+    }
+
+    .progress-bar.blue {
+      background: var(--brand-400);
+    }
+
+    .progress-bar.green {
+      background: var(--green-500);
+    }
+
+    .progress-bar.amber {
+      background: var(--amber-500);
+    }
+
+    /* Grid helpers */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .mt-16 {
+      margin-top: 16px;
+    }
+
+    .mt-12 {
+      margin-top: 12px;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .gap-8 {
+      gap: 8px;
+    }
+
+    .gap-12 {
+      gap: 12px;
+    }
+
+    .ml-auto {
+      margin-left: auto;
+    }
+
+    /* Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--slate-400);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      background: var(--slate-50);
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--slate-100);
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td {
+      background: var(--slate-50);
+    }
+
+    /* Button */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all .12s;
+    }
+
+    .btn-primary {
+      background: var(--brand-500);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #1e40af;
+    }
+
+    .btn-secondary {
+      background: var(--slate-100);
+      color: var(--brand-800);
+      border: 1px solid var(--slate-200);
+    }
+
+    .btn-secondary:hover {
+      background: var(--slate-200);
+    }
+
+    .btn-danger {
+      background: var(--red-500);
+      color: #fff;
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    /* Section header */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--brand-900);
+    }
+
+    .section-sub {
+      font-size: 12px;
+      color: var(--slate-400);
+      margin-top: 1px;
+    }
+
+    /* ============================================================
+   DASHBOARD PAGE
+   ============================================================ */
+
+    /* GPU bar */
+    .gpu-meter {
+      margin-top: 10px;
+    }
+
+    .gpu-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .gpu-label {
+      font-size: 11px;
+      color: var(--slate-400);
+      width: 80px;
+      flex-shrink: 0;
+    }
+
+    .gpu-val {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--brand-800);
+      width: 45px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .gpu-bar-wrap {
+      flex: 1;
+      background: var(--slate-200);
+      border-radius: 99px;
+      height: 7px;
+      overflow: hidden;
+    }
+
+    .gpu-bar {
+      height: 100%;
+      border-radius: 99px;
+    }
+
+    /* Quick actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .qa-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 8px;
+      background: var(--slate-50);
+      border: 1.5px solid var(--slate-200);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all .15s;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--brand-700);
+      text-align: center;
+    }
+
+    .qa-btn:hover {
+      background: var(--brand-100);
+      border-color: var(--brand-400);
+      color: var(--brand-500);
+    }
+
+    .qa-btn .qa-icon {
+      font-size: 22px;
+    }
+
+    /* Alarm list */
+    .alarm-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--slate-100);
+    }
+
+    .alarm-item:last-child {
+      border-bottom: none;
+    }
+
+    .alarm-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .alarm-dot.high {
+      background: var(--red-500);
+    }
+
+    .alarm-dot.medium {
+      background: var(--amber-500);
+    }
+
+    .alarm-dot.low {
+      background: var(--brand-400);
+    }
+
+    .alarm-equip {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brand-800);
+    }
+
+    .alarm-desc {
+      font-size: 12px;
+      color: var(--slate-400);
+    }
+
+    .alarm-time {
+      font-size: 11px;
+      color: var(--slate-400);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+   PIPELINE MONITOR PAGE
+   ============================================================ */
+
+    /* DAG visualization */
+    .dag-container {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    .dag-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      align-items: center;
+      min-width: 700px;
+    }
+
+    /* Agent node */
+    .dag-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .dag-row+.dag-row {
+      margin-top: 24px;
+    }
+
+    .agent-node {
+      width: 130px;
+      border: 2px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 8px 10px;
+      background: #fff;
+      text-align: center;
+      position: relative;
+      transition: all .2s;
+    }
+
+    .agent-node.status-done {
+      border-color: var(--green-500);
+    }
+
+    .agent-node.status-running {
+      border-color: var(--brand-400);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, .15);
+    }
+
+    .agent-node.status-waiting {
+      border-color: var(--slate-200);
+      opacity: .7;
+    }
+
+    .agent-node.status-failed {
+      border-color: var(--red-500);
+    }
+
+    .agent-id {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--slate-400);
+      letter-spacing: .4px;
+    }
+
+    .agent-name {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--brand-800);
+      margin: 3px 0 5px;
+      line-height: 1.25;
+    }
+
+    .agent-stat {
+      font-size: 10px;
+    }
+
+    .dag-arrow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 24px;
+      color: var(--slate-400);
+      font-size: 16px;
+    }
+
+    .dag-connector {
+      display: flex;
+      justify-content: center;
+      gap: 100px;
+      height: 24px;
+      position: relative;
+    }
+
+    .dag-connector::before {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 1px;
+      background: var(--slate-300);
+    }
+
+    /* Job form */
+    .job-form {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--slate-400);
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+
+    .form-input {
+      padding: 7px 10px;
+      border: 1px solid var(--slate-200);
+      border-radius: 6px;
+      font-size: 13px;
+      background: #fff;
+      color: var(--brand-900);
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--brand-400);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, .12);
+    }
+
+    /* Log terminal */
+    .log-term {
+      background: var(--brand-900);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-family: 'Courier New', monospace;
+      font-size: 11.5px;
+      color: #a3e635;
+      height: 140px;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+
+    .log-term .log-ts {
+      color: var(--slate-400);
+    }
+
+    .log-term .log-ok {
+      color: var(--green-500);
+    }
+
+    .log-term .log-run {
+      color: var(--brand-400);
+    }
+
+    .log-term .log-err {
+      color: var(--red-500);
+    }
+
+    .log-term .log-info {
+      color: #e2e8f0;
+    }
+
+    /* ============================================================
+   AI ASSISTANTS PAGE
+   ============================================================ */
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .agent-card {
+      border: 1.5px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #fff;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .agent-card:hover {
+      border-color: var(--brand-400);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, .1);
+    }
+
+    .agent-card.selected {
+      border-color: var(--brand-500);
+      background: #eff6ff;
+    }
+
+    .agent-card-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .agent-card-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brand-800);
+      margin-bottom: 3px;
+    }
+
+    .agent-card-desc {
+      font-size: 11px;
+      color: var(--slate-400);
+      line-height: 1.4;
+    }
+
+    .agent-card-tags {
+      margin-top: 8px;
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 99px;
+      background: var(--slate-100);
+      color: var(--slate-400);
+      font-weight: 600;
+    }
+
+    /* ── Built-in Chat UI ── */
+    .chat-shell {
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .chat-topbar {
+      padding: 10px 14px;
+      background: var(--brand-900);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .chat-topbar .dot-row {
+      display: flex;
+      gap: 5px;
+    }
+
+    .chat-topbar .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .chat-topbar .dot.r {
+      background: var(--red-500);
+    }
+
+    .chat-topbar .dot.y {
+      background: var(--amber-500);
+    }
+
+    .chat-topbar .dot.g {
+      background: var(--green-500);
+    }
+
+    .chat-conn-badge {
+      margin-left: auto;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-weight: 600;
+    }
+
+    .chat-conn-badge.online {
+      background: rgba(16, 185, 129, .2);
+      color: #6ee7b7;
+    }
+
+    .chat-conn-badge.offline {
+      background: rgba(239, 68, 68, .2);
+      color: #fca5a5;
+    }
+
+    .chat-msgs {
+      flex: 1;
+      height: 400px;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: var(--slate-50);
+    }
+
+    .chat-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--slate-400);
+      text-align: center;
+      margin: auto;
+    }
+
+    .chat-empty .e-icon {
+      font-size: 36px;
+    }
+
+    .chat-empty .e-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--brand-700);
+    }
+
+    .chat-empty .e-sub {
+      font-size: 12px;
+      line-height: 1.5;
+      max-width: 320px;
+    }
+
+    .chat-empty .e-hint {
+      margin-top: 6px;
+      font-size: 11px;
+      background: var(--amber-100);
+      color: #78350f;
+      padding: 7px 12px;
+      border-radius: 7px;
+      border: 1px solid #fde68a;
+      max-width: 360px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .msg.user {
+      flex-direction: row-reverse;
+    }
+
+    .msg-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .msg.user .msg-avatar {
+      background: var(--brand-500);
+    }
+
+    .msg.ai .msg-avatar {
+      background: var(--slate-200);
+    }
+
+    .msg-bubble {
+      max-width: 75%;
+      padding: 9px 13px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .msg.user .msg-bubble {
+      background: var(--brand-500);
+      color: #fff;
+      border-radius: 12px 2px 12px 12px;
+    }
+
+    .msg.ai .msg-bubble {
+      background: #fff;
+      border: 1px solid var(--slate-200);
+      color: var(--brand-900);
+      border-radius: 2px 12px 12px 12px;
+    }
+
+    .msg-meta {
+      font-size: 10px;
+      color: var(--slate-400);
+      margin-top: 3px;
+      padding: 0 4px;
+    }
+
+    .msg.user .msg-meta {
+      text-align: right;
+    }
+
+    .typing-bubble {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 10px 14px;
+    }
+
+    .typing-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--slate-400);
+      animation: bounce 1.2s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: .2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: .4s;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      80%,
+      100% {
+        transform: translateY(0)
+      }
+
+      40% {
+        transform: translateY(-6px)
+      }
+    }
+
+    .quick-prompts {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 8px 12px;
+      border-top: 1px solid var(--slate-100);
+      background: #fff;
+    }
+
+    .qp-btn {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 99px;
+      background: var(--slate-100);
+      border: 1px solid var(--slate-200);
+      color: var(--brand-700);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all .12s;
+    }
+
+    .qp-btn:hover {
+      background: var(--brand-100);
+      border-color: var(--brand-400);
+      color: var(--brand-500);
+    }
+
+    .chat-inputbar {
+      display: flex;
+      gap: 8px;
+      padding: 10px 12px;
+      border-top: 1px solid var(--slate-200);
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      resize: none;
+      max-height: 100px;
+      line-height: 1.4;
+      background: var(--slate-50);
+      color: var(--brand-900);
+    }
+
+    .chat-input:focus {
+      border-color: var(--brand-400);
+      background: #fff;
+    }
+
+    .chat-send {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: var(--brand-500);
+      color: #fff;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background .12s;
+      align-self: flex-end;
+    }
+
+    .chat-send:hover {
+      background: #1e40af;
+    }
+
+    .chat-send:disabled {
+      background: var(--slate-300);
+      cursor: not-allowed;
+    }
+
+    .chat-clear {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: var(--slate-100);
+      color: var(--slate-400);
+      border: 1px solid var(--slate-200);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .12s;
+      align-self: flex-end;
+    }
+
+    .chat-clear:hover {
+      background: var(--red-100);
+      color: var(--red-500);
+    }
+
+    .src-chip {
+      display: inline-block;
+      margin: 2px 3px;
+      padding: 1px 7px;
+      border-radius: 4px;
+      background: var(--slate-100);
+      border: 1px solid var(--slate-200);
+      color: var(--slate-400);
+      font-size: 10.5px;
+    }
+
+    /* ============================================================
+   AUTO REPORTS PAGE
+   ============================================================ */
+    .report-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--slate-100);
+    }
+
+    .report-row:last-child {
+      border-bottom: none;
+    }
+
+    .report-icon {
+      font-size: 22px;
+    }
+
+    .report-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brand-800);
+    }
+
+    .report-meta {
+      font-size: 11px;
+      color: var(--slate-400);
+      margin-top: 2px;
+    }
+
+    .report-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 6px;
+    }
+
+    /* Schedule toggle */
+    .schedule-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--slate-100);
+    }
+
+    .schedule-item:last-child {
+      border-bottom: none;
+    }
+
+    .toggle {
+      width: 38px;
+      height: 22px;
+      border-radius: 11px;
+      border: none;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background .2s;
+    }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      transition: left .2s;
+    }
+
+    .toggle.on {
+      background: var(--brand-500);
+    }
+
+    .toggle.on::after {
+      left: 19px;
+    }
+
+    .toggle.off {
+      background: var(--slate-300);
+    }
+
+    /* ============================================================
+   KNOWLEDGE BASE PAGE
+   ============================================================ */
+    .kb-doc-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--slate-100);
+    }
+
+    .kb-doc-row:last-child {
+      border-bottom: none;
+    }
+
+    .kb-doc-icon {
+      font-size: 18px;
+    }
+
+    .kb-doc-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brand-800);
+    }
+
+    .kb-doc-meta {
+      font-size: 11px;
+      color: var(--slate-400);
+      margin-top: 1px;
+    }
+
+    .kb-status {
+      margin-left: auto;
+    }
+
+    .vec-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+    }
+
+    .vec-badge.done {
+      background: var(--green-100);
+      color: #065f46;
+    }
+
+    .vec-badge.pending {
+      background: var(--amber-100);
+      color: #78350f;
+    }
+
+    .vec-badge.error {
+      background: var(--red-100);
+      color: #7f1d1d;
+    }
+
+    /* Upload zone */
+    .upload-zone {
+      border: 2px dashed var(--slate-300);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .15s;
+      background: var(--slate-50);
+    }
+
+    .upload-zone:hover {
+      border-color: var(--brand-400);
+      background: var(--brand-100);
+    }
+
+    .upload-zone .up-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .upload-zone p {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brand-700);
+    }
+
+    .upload-zone span {
+      font-size: 11px;
+      color: var(--slate-400);
+    }
+
+    /* ============================================================
+   MODAL
+   ============================================================ */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .modal-bg.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      width: min(520px, 94vw);
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 15px;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .modal-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      background: var(--slate-100);
+      font-size: 16px;
+    }
+
+    .modal-body {
+      padding: 16px 20px;
+    }
+
+    .modal-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--slate-200);
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    /* Notification toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--brand-900);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all .3s ease;
+      z-index: 500;
+      max-width: 320px;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      border-left: 3px solid var(--green-500);
+    }
+
+    .toast.info {
+      border-left: 3px solid var(--brand-400);
+    }
+
+    .toast.warn {
+      border-left: 3px solid var(--amber-500);
+    }
+
+    /* Utility */
+    .text-xs {
+      font-size: 11px;
+    }
+
+    .text-sm {
+      font-size: 12px;
+    }
+
+    .text-muted {
+      color: var(--slate-400);
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .text-green {
+      color: var(--green-500);
+    }
+
+    .text-red {
+      color: var(--red-500);
+    }
+
+    .text-amber {
+      color: var(--amber-500);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════════
+     ROLE SELECTION SCREEN
+══════════════════════════════════════════ -->
+  <div id="role-screen">
+    <div class="role-logo">
+      <h1>🏭 Manufacturing AI Portal</h1>
+      <p>BE-ATKH · SmartManufacturing AI Platform</p>
+      <span class="badge"> 製程</span>
+    </div>
+
+    <div class="role-grid">
+      <div class="role-card" onclick="selectRole('process')">
+        <div class="icon">⚗️</div>
+        <div class="title">製程工程師</div>
+        <div class="desc">製程參數查詢、RCA 分析、良率報告</div>
+        <div class="apps">
+          <span class="app-pill">製程助手</span>
+          <span class="app-pill">RCA</span>
+          <span class="app-pill">8D 報告</span>
+          <span class="app-pill">WAT 分析</span>
+        </div>
+      </div>
+      <div class="role-card" onclick="selectRole('equipment')">
+        <div class="icon">🔧</div>
+        <div class="title">設備工程師</div>
+        <div class="desc">設備故障診斷、PM 引導、Alarm 分析</div>
+        <div class="apps">
+          <span class="app-pill">設備助手</span>
+          <span class="app-pill">PM 引導</span>
+          <span class="app-pill">Alarm 摘要</span>
+        </div>
+      </div>
+      <div class="role-card" onclick="selectRole('quality')">
+        <div class="icon">🔬</div>
+        <div class="title">品質工程師</div>
+        <div class="desc">CSR 解析、FMEA、客訴分析、稽核準備</div>
+        <div class="apps">
+          <span class="app-pill">品質助手</span>
+          <span class="app-pill">FMEA</span>
+          <span class="app-pill">稽核準備</span>
+        </div>
+      </div>
+      <div class="role-card" onclick="selectRole('admin')">
+        <div class="icon">🛠️</div>
+        <div class="title">管理員 / 開發者</div>
+        <div class="desc">知識庫管理、模型設定、排程設定</div>
+        <div class="apps">
+          <span class="app-pill">知識庫</span>
+          <span class="app-pill">排程</span>
+          <span class="app-pill">系統設定</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+     APP SHELL
+══════════════════════════════════════════ -->
+  <div id="app" class="hidden">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <div class="sidebar-logo">
+        <div class="name">🏭 AI Portal</div>
+        <div class="sub">BE-ATKH</div>
+      </div>
+      <div class="role-indicator">
+        <div class="role-dot" id="role-dot"></div>
+        <span id="role-label">製程工程師</span>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">主要功能</div>
+        <div class="nav-item active" onclick="nav('dashboard',this)">
+          <span class="nav-icon">🏠</span> Dashboard
+        </div>
+        <div class="nav-item" onclick="nav('assistants',this)">
+          <span class="nav-icon">🤖</span> AI Assistants
+        </div>
+        <div class="nav-item" onclick="nav('pipeline',this)" id="nav-pipeline">
+          <span class="nav-icon">⚡</span> Pipeline Monitor
+          <span class="badge-num" id="pipeline-badge">2</span>
+        </div>
+        <div class="nav-item" onclick="nav('reports',this)">
+          <span class="nav-icon">📊</span> Auto Reports
+        </div>
+      </div>
+
+      <div class="nav-section" id="nav-kb-section">
+        <div class="nav-label">管理</div>
+        <div class="nav-item" onclick="nav('knowledge',this)">
+          <span class="nav-icon">📚</span> 知識庫管理
+        </div>
+        <div class="nav-item" onclick="nav('settings',this)">
+          <span class="nav-icon">⚙️</span> 系統設定
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="server-status">
+          <div class="status-dot online" id="server-dot"></div>
+          <span id="server-status-text">vLLM 推理引擎 — 上線中</span>
+        </div>
+        <div class="server-status mt-4" style="margin-top:6px; font-size:10px; color:#64748b;">
+          GPU: <span id="gpu-live">68%</span> &nbsp;|&nbsp; VRAM: <span id="vram-live">41/96 GB</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main -->
+    <div id="main">
+      <div id="header">
+        <div class="header-title" id="page-title">Dashboard</div>
+        <div class="header-actions">
+          <button class="icon-btn" title="通知">🔔</button>
+          <button class="icon-btn" title="重新整理" onclick="refreshData()">🔄</button>
+          <button class="switch-role-btn" onclick="switchRole()">切換角色</button>
+        </div>
+      </div>
+
+      <div id="content">
+
+        <!-- ══ DASHBOARD PAGE ══ -->
+        <div class="page active" id="page-dashboard">
+          <!-- Stat Row -->
+          <div class="grid-4">
+            <div class="stat-card">
+              <div class="stat-label">GPU 使用率</div>
+              <div class="stat-value" id="stat-gpu">68%</div>
+              <div class="progress-wrap" style="margin-top:8px">
+                <div class="progress-bar blue" id="bar-gpu" style="width:68%"></div>
+              </div>
+              <div class="stat-badge green">RTX PRO 6000 上線</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">VRAM 使用</div>
+              <div class="stat-value">41 <span style="font-size:14px;font-weight:400;color:var(--slate-400)">/ 96
+                  GB</span></div>
+              <div class="progress-wrap" style="margin-top:8px">
+                <div class="progress-bar amber" style="width:43%"></div>
+              </div>
+              <div class="stat-badge amber">Gemma4-31B 載入中</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">進行中 RCA 任務</div>
+              <div class="stat-value" id="stat-rca">2</div>
+              <div class="stat-sub">今日完成：5 個</div>
+              <div class="stat-badge blue">最新：LOT-240423-018</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">未處理 Alarm</div>
+              <div class="stat-value text-amber" id="stat-alarm">7</div>
+              <div class="stat-sub">高優先：<span class="text-red font-bold">2</span> 項</div>
+              <div class="stat-badge red">WB#3 壓力偏高 ⚠️</div>
+            </div>
+          </div>
+
+          <div class="grid-2 mt-16">
+            <!-- Quick Actions -->
+            <div class="card">
+              <div class="card-header">
+                <span>⚡</span>
+                <span class="card-title">快速操作</span>
+              </div>
+              <div class="card-body">
+                <div class="quick-actions">
+                  <button class="qa-btn" onclick="openRCAModal()">
+                    <span class="qa-icon">🔍</span>啟動 RCA 分析
+                  </button>
+                  <button class="qa-btn" onclick="nav('assistants', document.querySelector('[onclick*=assistants]'))">
+                    <span class="qa-icon">💬</span>製程問答
+                  </button>
+                  <button class="qa-btn" onclick="open8DModal()">
+                    <span class="qa-icon">📝</span>起草 8D 報告
+                  </button>
+                  <button class="qa-btn" onclick="nav('reports', document.querySelectorAll('.nav-item')[3])">
+                    <span class="qa-icon">📊</span>查看報告
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Active RCA -->
+            <div class="card">
+              <div class="card-header">
+                <span>⚡</span>
+                <span class="card-title">進行中 RCA Pipeline</span>
+                <button class="card-action" onclick="nav('pipeline',null)">查看全部 →</button>
+              </div>
+              <div class="card-body" style="padding:0">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Lot ID</th>
+                      <th>製程</th>
+                      <th>進度</th>
+                      <th>狀態</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="font-bold">LOT-240423-018</td>
+                      <td>MCX A10</td>
+                      <td>
+                        <div class="progress-wrap" style="width:120px">
+                          <div class="progress-bar blue" style="width:67%"></div>
+                        </div>
+                        <div class="text-xs text-muted mt-1">6/9 agents</div>
+                      </td>
+                      <td><span class="pill running">● 運行中</span></td>
+                    </tr>
+                    <tr>
+                      <td class="font-bold">LOT-240423-012</td>
+                      <td>MW30</td>
+                      <td>
+                        <div class="progress-wrap" style="width:120px">
+                          <div class="progress-bar amber" style="width:33%"></div>
+                        </div>
+                        <div class="text-xs text-muted mt-1">3/9 agents</div>
+                      </td>
+                      <td><span class="pill running">● 運行中</span></td>
+                    </tr>
+                    <tr>
+                      <td class="font-bold">LOT-240422-055</td>
+                      <td>MW30</td>
+                      <td>
+                        <div class="progress-wrap" style="width:120px">
+                          <div class="progress-bar green" style="width:100%"></div>
+                        </div>
+                      </td>
+                      <td><span class="pill done">✓ 完成</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2 mt-16">
+            <!-- Alarm Summary -->
+            <div class="card">
+              <div class="card-header">
+                <span>⚠️</span>
+                <span class="card-title">今日設備 Alarm 摘要</span>
+                <button class="card-action">查看全部 →</button>
+              </div>
+              <div class="card-body">
+                <div class="alarm-item">
+                  <div class="alarm-dot high"></div>
+                  <div>
+                    <div class="alarm-equip">Wire Bonder #3</div>
+                    <div class="alarm-desc">Bond force 偏高 +12%，已超出 UCL，需立即確認</div>
+                  </div>
+                  <div class="alarm-time">08:42</div>
+                </div>
+                <div class="alarm-item">
+                  <div class="alarm-dot high"></div>
+                  <div>
+                    <div class="alarm-equip">Probe Station #1</div>
+                    <div class="alarm-desc">Contact resistance 異常，MCX A10 WAT fail rate 上升</div>
+                  </div>
+                  <div class="alarm-time">09:15</div>
+                </div>
+                <div class="alarm-item">
+                  <div class="alarm-dot medium"></div>
+                  <div>
+                    <div class="alarm-equip">Die Attach #2</div>
+                    <div class="alarm-desc">溫度偏差 +3°C，在管制界限內但趨勢向上</div>
+                  </div>
+                  <div class="alarm-time">10:03</div>
+                </div>
+                <div class="alarm-item">
+                  <div class="alarm-dot low"></div>
+                  <div>
+                    <div class="alarm-equip">Molding Press #1</div>
+                    <div class="alarm-desc">壓力設定值更新，下班後確認 PM 記錄</div>
+                  </div>
+                  <div class="alarm-time">11:30</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Yield Overview -->
+            <div class="card">
+              <div class="card-header">
+                <span>📈</span>
+                <span class="card-title">本週良率概況</span>
+                <button class="card-action">詳細報告 →</button>
+              </div>
+              <div class="card-body">
+                <div class="gpu-meter">
+                  <div class="gpu-row">
+                    <div class="gpu-label">MCX A10</div>
+                    <div class="gpu-bar-wrap">
+                      <div class="gpu-bar" style="width:92%;background:var(--green-500)"></div>
+                    </div>
+                    <div class="gpu-val text-green">92.3%</div>
+                  </div>
+                  <div class="gpu-row">
+                    <div class="gpu-label">MW30</div>
+                    <div class="gpu-bar-wrap">
+                      <div class="gpu-bar" style="width:87%;background:var(--amber-500)"></div>
+                    </div>
+                    <div class="gpu-val text-amber">87.1%</div>
+                  </div>
+                  <div class="gpu-row">
+                    <div class="gpu-label">Wire Bond</div>
+                    <div class="gpu-bar-wrap">
+                      <div class="gpu-bar" style="width:95%;background:var(--green-500)"></div>
+                    </div>
+                    <div class="gpu-val text-green">95.8%</div>
+                  </div>
+                  <div class="gpu-row">
+                    <div class="gpu-label">Final Test</div>
+                    <div class="gpu-bar-wrap">
+                      <div class="gpu-bar" style="width:78%;background:var(--red-500)"></div>
+                    </div>
+                    <div class="gpu-val text-red">78.2%</div>
+                  </div>
+                </div>
+                <div style="margin-top:12px; padding:10px; background:var(--red-100); border-radius:6px;">
+                  <div class="text-sm font-bold text-red">⚠️ AI 診斷：Final Test 良率低於目標值 (80%)</div>
+                  <div class="text-xs text-muted" style="margin-top:3px">建議啟動 RCA 分析。可能原因：Probe card 老化 + 溫度異常。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ AI ASSISTANTS PAGE ══ -->
+        <div class="page" id="page-assistants">
+          <div class="section-header">
+            <div>
+              <div class="section-title">🤖 AI Assistants</div>
+              <div class="section-sub">選擇助手，開始對話</div>
+            </div>
+          </div>
+          <div class="agent-grid" id="agent-grid">
+            <div class="agent-card selected" onclick="selectAgent(this,'製程工程師助手','process_eng')">
+              <div class="agent-card-icon">⚗️</div>
+              <div class="agent-card-name">製程工程師助手</div>
+              <div class="agent-card-desc">MW30 製程參數查詢、偏差分析、SOP 問答</div>
+              <div class="agent-card-tags">
+                <span class="tag">RAG</span><span class="tag">SOP</span><span class="tag">製程</span>
+              </div>
+            </div>
+            <div class="agent-card" onclick="selectAgent(this,'RCA 分析助手','rca')">
+              <div class="agent-card-icon">🔍</div>
+              <div class="agent-card-name">RCA 分析助手</div>
+              <div class="agent-card-desc">輸入 Lot ID 或異常描述，啟動 9-agent 根因分析 pipeline</div>
+              <div class="agent-card-tags">
+                <span class="tag">9-Agent</span><span class="tag">Pipeline</span><span class="tag">30-45min</span>
+              </div>
+            </div>
+            <div class="agent-card" onclick="selectAgent(this,'良率報告助手','yield')">
+              <div class="agent-card-icon">📊</div>
+              <div class="agent-card-name">良率報告助手</div>
+              <div class="agent-card-desc">WAT/CPK 分析、MRAT 報告自動生成、良率趨勢解讀</div>
+              <div class="agent-card-tags">
+                <span class="tag">MRAT</span><span class="tag">WAT</span><span class="tag">報告</span>
+              </div>
+            </div>
+            <div class="agent-card" onclick="selectAgent(this,'設備維護助手','equipment')">
+              <div class="agent-card-icon">🔧</div>
+              <div class="agent-card-name">設備維護助手</div>
+              <div class="agent-card-desc">Wire Bonder / Die Attach 故障診斷、PM SOP 步驟引導</div>
+              <div class="agent-card-tags">
+                <span class="tag">故障診斷</span><span class="tag">PM</span><span class="tag">設備手冊</span>
+              </div>
+            </div>
+            <div class="agent-card" onclick="selectAgent(this,'技術文獻搜尋','literature')">
+              <div class="agent-card-icon">📖</div>
+              <div class="agent-card-name">技術文獻搜尋</div>
+              <div class="agent-card-desc">Obsidian Vault + 論文庫搜尋，含 JEDEC / AEC 規格查詢</div>
+              <div class="agent-card-tags">
+                <span class="tag">Vault RAG</span><span class="tag">JEDEC</span><span class="tag">文獻</span>
+              </div>
+            </div>
+            <div class="agent-card" onclick="selectAgent(this,'程式碼助手','code')">
+              <div class="agent-card-icon">💻</div>
+              <div class="agent-card-name">程式碼助手</div>
+              <div class="agent-card-desc">Python 數據分析腳本、SQL 查詢、WAT 數據 box plot 生成</div>
+              <div class="agent-card-tags">
+                <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">分析</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Built-in Chat Shell -->
+          <div class="chat-shell mt-16">
+            <!-- Top bar -->
+            <div class="chat-topbar">
+              <div class="dot-row">
+                <div class="dot r"></div>
+                <div class="dot y"></div>
+                <div class="dot g"></div>
+              </div>
+              <span style="margin-left:10px" id="chat-agent-label">⚗️ 製程工程師助手</span>
+              <span id="chat-conn-badge" class="chat-conn-badge offline">● 未連線</span>
+            </div>
+
+            <!-- Messages -->
+            <div class="chat-msgs" id="chat-msgs">
+              <div class="chat-empty" id="chat-empty">
+                <div class="e-icon">⚗️</div>
+                <div class="e-title">製程工程師助手</div>
+                <div class="e-sub">可詢問 MW30 / MCX A10 製程參數、WAT 異常解讀、SOP 查詢等問題。所有對話在工廠內網處理，資料不外傳。</div>
+                <div class="e-hint" id="chat-hint">
+                  ⚠️ 目前以離線模式運行。部署伺服器後，將直接連線 vLLM API (port 8000)。
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick prompts -->
+            <div class="quick-prompts" id="quick-prompts">
+              <button class="qp-btn" onclick="sendQuick(this)">MCX A10 bonding force 標準值？</button>
+              <button class="qp-btn" onclick="sendQuick(this)">MW30 溫度偏高 5°C 的影響？</button>
+              <button class="qp-btn" onclick="sendQuick(this)">Probe card 更換條件？</button>
+              <button class="qp-btn" onclick="sendQuick(this)">Wire bond 拉力不足的原因？</button>
+            </div>
+
+            <!-- Input bar -->
+            <div class="chat-inputbar">
+              <textarea class="chat-input" id="chat-input" rows="1" placeholder="輸入問題，按 Enter 送出（Shift+Enter 換行）..."
+                onkeydown="chatKeydown(event)" oninput="autoResize(this)"></textarea>
+              <button class="chat-clear" title="清除對話" onclick="clearChat()">🗑️</button>
+              <button class="chat-send" id="chat-send" onclick="sendChat()" title="送出">➤</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ PIPELINE MONITOR PAGE ══ -->
+        <div class="page" id="page-pipeline">
+          <div class="section-header">
+            <div>
+              <div class="section-title">⚡ Pipeline Monitor</div>
+              <div class="section-sub">9-Agent RCA 任務追蹤</div>
+            </div>
+            <div class="ml-auto">
+              <button class="btn btn-primary" onclick="openRCAModal()">＋ 新增 RCA 任務</button>
+            </div>
+          </div>
+
+          <!-- Active job detail -->
+          <div class="card">
+            <div class="card-header">
+              <span>🔍</span>
+              <span class="card-title">LOT-240423-018 — MCX A10 良率異常 RCA</span>
+              <span class="pill running" style="margin-left:8px">● 運行中</span>
+              <span class="text-xs text-muted ml-auto">預計完成：約 18 分鐘後</span>
+            </div>
+            <div class="card-body">
+              <div class="grid-3" style="margin-bottom:14px">
+                <div>
+                  <div class="text-xs text-muted">觸發時間</div>
+                  <div class="font-bold text-sm">2026-04-23 09:42</div>
+                </div>
+                <div>
+                  <div class="text-xs text-muted">觸發方式</div>
+                  <div class="font-bold text-sm">手動（品質工程師）</div>
+                </div>
+                <div>
+                  <div class="text-xs text-muted">異常描述</div>
+                  <div class="font-bold text-sm">Final Test 良率 78.2%，低於目標</div>
+                </div>
+              </div>
+
+              <!-- 9-Agent DAG -->
+              <div class="dag-container">
+                <div class="dag-wrap">
+                  <!-- Row 1: Trigger -->
+                  <div class="dag-row">
+                    <div class="agent-node status-done">
+                      <div class="agent-id">A0</div>
+                      <div class="agent-name">觸發 & 資料收集</div>
+                      <div class="agent-stat"><span class="pill done" style="font-size:9px">✓ 完成</span></div>
+                    </div>
+                  </div>
+                  <div class="dag-arrow">↓</div>
+
+                  <!-- Row 2: Parallel analysis -->
+                  <div class="dag-row">
+                    <div class="agent-node status-done">
+                      <div class="agent-id">A1</div>
+                      <div class="agent-name">WAT / CPK 分析</div>
+                      <div class="agent-stat"><span class="pill done" style="font-size:9px">✓ 完成</span></div>
+                    </div>
+                    <div class="agent-node status-done">
+                      <div class="agent-id">A2</div>
+                      <div class="agent-name">製程參數分析</div>
+                      <div class="agent-stat"><span class="pill done" style="font-size:9px">✓ 完成</span></div>
+                    </div>
+                    <div class="agent-node status-done">
+                      <div class="agent-id">A3</div>
+                      <div class="agent-name">設備 Alarm 分析</div>
+                      <div class="agent-stat"><span class="pill done" style="font-size:9px">✓ 完成</span></div>
+                    </div>
+                  </div>
+                  <div class="dag-arrow">↓</div>
+
+                  <!-- Row 3: Cross-reference -->
+                  <div class="dag-row">
+                    <div class="agent-node status-running">
+                      <div class="agent-id">A4</div>
+                      <div class="agent-name">歷史案例比對</div>
+                      <div class="agent-stat"><span class="pill running" style="font-size:9px">● 運行</span></div>
+                    </div>
+                    <div class="agent-node status-running">
+                      <div class="agent-id">A5</div>
+                      <div class="agent-name">Probe Card 狀態</div>
+                      <div class="agent-stat"><span class="pill running" style="font-size:9px">● 運行</span></div>
+                    </div>
+                  </div>
+                  <div class="dag-arrow">↓</div>
+
+                  <!-- Row 4: Risk + CAP -->
+                  <div class="dag-row">
+                    <div class="agent-node status-waiting">
+                      <div class="agent-id">A6</div>
+                      <div class="agent-name">風險評估 (Risk)</div>
+                      <div class="agent-stat"><span class="pill waiting" style="font-size:9px">⌛ 等待</span></div>
+                    </div>
+                    <div class="agent-node status-waiting">
+                      <div class="agent-id">A7</div>
+                      <div class="agent-name">矯正措施 (CAP)</div>
+                      <div class="agent-stat"><span class="pill waiting" style="font-size:9px">⌛ 等待</span></div>
+                    </div>
+                  </div>
+                  <div class="dag-arrow">↓</div>
+
+                  <!-- Row 5: Report -->
+                  <div class="dag-row">
+                    <div class="agent-node status-waiting">
+                      <div class="agent-id">A8</div>
+                      <div class="agent-name">MRAT 報告 & 通知</div>
+                      <div class="agent-stat"><span class="pill waiting" style="font-size:9px">⌛ 等待</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Progress -->
+              <div style="margin-top:14px">
+                <div class="flex items-center gap-8" style="margin-bottom:6px">
+                  <span class="text-sm font-bold">總進度</span>
+                  <span class="text-sm text-muted ml-auto">6 / 9 agents 完成</span>
+                </div>
+                <div class="progress-wrap">
+                  <div class="progress-bar blue" id="rca-progress" style="width:67%"></div>
+                </div>
+              </div>
+
+              <!-- Log -->
+              <div style="margin-top:12px">
+                <div class="text-xs text-muted font-bold"
+                  style="margin-bottom:6px; text-transform:uppercase; letter-spacing:.4px">即時 Log</div>
+                <div class="log-term" id="pipeline-log">
+                  <div><span class="log-ts">[09:42:01]</span> <span class="log-ok">✓</span> <span class="log-info">A0 觸發
+                      &amp; 資料收集完成 — Lot: LOT-240423-018, 製程: MCX A10</span></div>
+                  <div><span class="log-ts">[09:44:15]</span> <span class="log-ok">✓</span> <span class="log-info">A1
+                      WAT/CPK 分析完成 — Bond pull &lt; 4gf 比例：8.3% (UCL: 5%)</span></div>
+                  <div><span class="log-ts">[09:45:30]</span> <span class="log-ok">✓</span> <span class="log-info">A2
+                      製程參數分析完成 — Wire bond temp 偏高 +5°C，已標記</span></div>
+                  <div><span class="log-ts">[09:46:02]</span> <span class="log-ok">✓</span> <span class="log-info">A3 設備
+                      Alarm 分析完成 — WB#3 bond force alarm 共 12 次</span></div>
+                  <div><span class="log-ts">[09:48:20]</span> <span class="log-run">→</span> <span class="log-info">A4
+                      歷史案例比對啟動中... 搜尋相似 pattern (2024-2026)</span></div>
+                  <div><span class="log-ts">[09:48:22]</span> <span class="log-run">→</span> <span class="log-info">A5
+                      Probe Card 狀態分析啟動中... 讀取 PC-MCX-007 使用記錄</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Job History -->
+          <div class="card mt-16">
+            <div class="card-header">
+              <span>📋</span>
+              <span class="card-title">任務歷史</span>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Lot ID</th>
+                  <th>製程</th>
+                  <th>觸發方式</th>
+                  <th>開始時間</th>
+                  <th>耗時</th>
+                  <th>狀態</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="font-bold">LOT-240423-018</td>
+                  <td>MCX A10</td>
+                  <td>手動</td>
+                  <td>09:42</td>
+                  <td>進行中</td>
+                  <td><span class="pill running">● 運行</span></td>
+                  <td><button class="btn btn-secondary btn-sm">查看</button></td>
+                </tr>
+                <tr>
+                  <td class="font-bold">LOT-240423-012</td>
+                  <td>MW30</td>
+                  <td>手動</td>
+                  <td>08:15</td>
+                  <td>進行中</td>
+                  <td><span class="pill running">● 運行</span></td>
+                  <td><button class="btn btn-secondary btn-sm">查看</button></td>
+                </tr>
+                <tr>
+                  <td class="font-bold">LOT-240422-055</td>
+                  <td>MW30</td>
+                  <td>Event (MES)</td>
+                  <td>昨日 22:10</td>
+                  <td>38 min</td>
+                  <td><span class="pill done">✓ 完成</span></td>
+                  <td><button class="btn btn-secondary btn-sm" onclick="showToast('正在下載 MRAT 報告...','info')">下載</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="font-bold">LOT-240422-041</td>
+                  <td>MCX A10</td>
+                  <td>Event (MES)</td>
+                  <td>昨日 18:30</td>
+                  <td>42 min</td>
+                  <td><span class="pill done">✓ 完成</span></td>
+                  <td><button class="btn btn-secondary btn-sm" onclick="showToast('正在下載 MRAT 報告...','info')">下載</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="font-bold">LOT-240422-033</td>
+                  <td>MW30</td>
+                  <td>手動</td>
+                  <td>昨日 14:05</td>
+                  <td>—</td>
+                  <td><span class="pill failed">✗ 失敗</span></td>
+                  <td><button class="btn btn-danger btn-sm" onclick="showToast('重新觸發 RCA...','warn')">重試</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ══ AUTO REPORTS PAGE ══ -->
+        <div class="page" id="page-reports">
+          <div class="section-header">
+            <div>
+              <div class="section-title">📊 Auto Reports</div>
+              <div class="section-sub">自動化報告中心</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Recent reports -->
+            <div class="card">
+              <div class="card-header">
+                <span>📄</span>
+                <span class="card-title">最新報告</span>
+              </div>
+              <div class="card-body" style="padding:0">
+                <div class="report-row">
+                  <div class="report-icon">📊</div>
+                  <div>
+                    <div class="report-name">MCX A10 良率週報 W16</div>
+                    <div class="report-meta">自動生成 · 2026-04-21 08:00 · PDF 2.3MB</div>
+                  </div>
+                  <div class="report-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="showToast('開啟報告預覽...','info')">預覽</button>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('下載中...','info')">下載</button>
+                  </div>
+                </div>
+                <div class="report-row">
+                  <div class="report-icon">🔧</div>
+                  <div>
+                    <div class="report-name">設備 Alarm 週報 W16</div>
+                    <div class="report-meta">自動生成 · 2026-04-21 08:00 · PDF 1.8MB</div>
+                  </div>
+                  <div class="report-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="showToast('開啟報告預覽...','info')">預覽</button>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('下載中...','info')">下載</button>
+                  </div>
+                </div>
+                <div class="report-row">
+                  <div class="report-icon">🌙</div>
+                  <div>
+                    <div class="report-name">C 班交接報告 2026-04-22</div>
+                    <div class="report-meta">自動生成 · 昨日 23:30 · PDF 0.8MB</div>
+                  </div>
+                  <div class="report-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="showToast('開啟報告預覽...','info')">預覽</button>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('下載中...','info')">下載</button>
+                  </div>
+                </div>
+                <div class="report-row">
+                  <div class="report-icon">📋</div>
+                  <div>
+                    <div class="report-name">MW30 MRAT 月報 2026-03</div>
+                    <div class="report-meta">自動生成 · 2026-04-01 09:00 · PDF 5.1MB</div>
+                  </div>
+                  <div class="report-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="showToast('開啟報告預覽...','info')">預覽</button>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('下載中...','info')">下載</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Schedule settings -->
+            <div class="card">
+              <div class="card-header">
+                <span>⏰</span>
+                <span class="card-title">排程設定</span>
+              </div>
+              <div class="card-body" style="padding:0">
+                <div class="schedule-item">
+                  <button class="toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+                  <div>
+                    <div class="font-bold text-sm">班別交接報告</div>
+                    <div class="text-xs text-muted">每班結束前 30 分鐘 · A/B/C 班自動觸發</div>
+                  </div>
+                  <span class="pill done" style="margin-left:auto">啟用</span>
+                </div>
+                <div class="schedule-item">
+                  <button class="toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+                  <div>
+                    <div class="font-bold text-sm">設備 Alarm 每日摘要</div>
+                    <div class="text-xs text-muted">每日 07:30 · n8n Cron</div>
+                  </div>
+                  <span class="pill done" style="margin-left:auto">啟用</span>
+                </div>
+                <div class="schedule-item">
+                  <button class="toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+                  <div>
+                    <div class="font-bold text-sm">良率週報</div>
+                    <div class="text-xs text-muted">每週一 08:00 · MW30</div>
+                  </div>
+                  <span class="pill done" style="margin-left:auto">啟用</span>
+                </div>
+                <div class="schedule-item">
+                  <button class="toggle off"
+                    onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+                  <div>
+                    <div class="font-bold text-sm">MRAT 月報</div>
+                    <div class="text-xs text-muted">每月 1 日 09:00 · 需手動確認後發送</div>
+                  </div>
+                  <span class="pill idle" style="margin-left:auto">停用</span>
+                </div>
+                <div class="schedule-item">
+                  <button class="toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+                  <div>
+                    <div class="font-bold text-sm">新資料 → 自動 RCA</div>
+                    <div class="text-xs text-muted">MES Webhook · 良率 &lt; 85% 自動觸發</div>
+                  </div>
+                  <span class="pill done" style="margin-left:auto">啟用</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ KNOWLEDGE BASE PAGE ══ -->
+        <div class="page" id="page-knowledge">
+          <div class="section-header">
+            <div>
+              <div class="section-title">📚 知識庫管理</div>
+              <div class="section-sub">SOP / 設備手冊 / 歷史案例</div>
+            </div>
+            <div class="ml-auto flex gap-8">
+              <button class="btn btn-secondary" onclick="showToast('開啟老師傅知識萃取訪談...','info')">🎙️ 知識萃取訪談</button>
+              <button class="btn btn-primary" onclick="document.getElementById('upload-zone').click()">＋ 上傳文件</button>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Upload -->
+            <div>
+              <div class="upload-zone" id="upload-zone" onclick="showToast('請選擇 PDF 或 DOCX 文件上傳','info')">
+                <div class="up-icon">📄</div>
+                <p>拖曳文件至此，或點選上傳</p>
+                <span>支援：PDF、DOCX、TXT · 最大 100MB</span>
+              </div>
+
+              <div class="card mt-12">
+                <div class="card-header"><span>📊</span><span class="card-title">知識庫統計</span></div>
+                <div class="card-body">
+                  <div class="gpu-meter">
+                    <div class="gpu-row">
+                      <div class="gpu-label">SOP 文件</div>
+                      <div class="gpu-bar-wrap">
+                        <div class="gpu-bar" style="width:72%;background:var(--brand-400)"></div>
+                      </div>
+                      <div class="gpu-val">36 份</div>
+                    </div>
+                    <div class="gpu-row">
+                      <div class="gpu-label">設備手冊</div>
+                      <div class="gpu-bar-wrap">
+                        <div class="gpu-bar" style="width:30%;background:var(--purple-500)"></div>
+                      </div>
+                      <div class="gpu-val">15 份</div>
+                    </div>
+                    <div class="gpu-row">
+                      <div class="gpu-label">RCA 歷史</div>
+                      <div class="gpu-bar-wrap">
+                        <div class="gpu-bar" style="width:80%;background:var(--amber-500)"></div>
+                      </div>
+                      <div class="gpu-val">40 份</div>
+                    </div>
+                    <div class="gpu-row">
+                      <div class="gpu-label">向量化碎片</div>
+                      <div class="gpu-bar-wrap">
+                        <div class="gpu-bar" style="width:100%;background:var(--green-500)"></div>
+                      </div>
+                      <div class="gpu-val">12,847</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Document list -->
+            <div class="card">
+              <div class="card-header">
+                <span>📁</span>
+                <span class="card-title">最近上傳文件</span>
+              </div>
+              <div class="card-body" style="padding:0">
+                <div class="kb-doc-row">
+                  <div class="kb-doc-icon">📄</div>
+                  <div>
+                    <div class="kb-doc-name">MCX-A10-Wire-Bond-SOP-v3.2.pdf</div>
+                    <div class="kb-doc-meta">上傳：2026-04-20 · 2.1MB · 128 頁</div>
+                  </div>
+                  <div class="kb-status"><span class="vec-badge done">已向量化</span></div>
+                </div>
+                <div class="kb-doc-row">
+                  <div class="kb-doc-icon">📄</div>
+                  <div>
+                    <div class="kb-doc-name">MW30-製程管制計劃-2026Q1.pdf</div>
+                    <div class="kb-doc-meta">上傳：2026-04-18 · 3.7MB · 245 頁</div>
+                  </div>
+                  <div class="kb-status"><span class="vec-badge done">已向量化</span></div>
+                </div>
+                <div class="kb-doc-row">
+                  <div class="kb-doc-icon">🔧</div>
+                  <div>
+                    <div class="kb-doc-name">K&S-Maxum-WB-設備手冊.pdf</div>
+                    <div class="kb-doc-meta">上傳：2026-04-15 · 8.3MB · 512 頁</div>
+                  </div>
+                  <div class="kb-status"><span class="vec-badge done">已向量化</span></div>
+                </div>
+                <div class="kb-doc-row">
+                  <div class="kb-doc-icon">📋</div>
+                  <div>
+                    <div class="kb-doc-name">FMEA-MCX-A10-Bonding-2026.xlsx</div>
+                    <div class="kb-doc-meta">上傳：今日 09:30 · 0.9MB</div>
+                  </div>
+                  <div class="kb-status"><span class="vec-badge pending">向量化中</span></div>
+                </div>
+                <div class="kb-doc-row">
+                  <div class="kb-doc-icon">📄</div>
+                  <div>
+                    <div class="kb-doc-name">RCA-歷史案例集-2025.pdf</div>
+                    <div class="kb-doc-meta">上傳：今日 11:00 · 15.2MB · 320 頁</div>
+                  </div>
+                  <div class="kb-status"><span class="vec-badge pending">向量化中</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ SETTINGS PAGE ══ -->
+        <div class="page" id="page-settings">
+          <div class="section-header">
+            <div>
+              <div class="section-title">⚙️ 系統設定</div>
+              <div class="section-sub">伺服器連線 / 模型設定</div>
+            </div>
+          </div>
+          <div class="card" style="max-width:600px">
+            <div class="card-header"><span>🔗</span><span class="card-title">API 連線設定</span></div>
+            <div class="card-body">
+              <div class="form-group" style="margin-bottom:12px">
+                <label class="form-label">伺服器 IP</label>
+                <input class="form-input" id="cfg-server-ip" value="192.168.1.100" placeholder="192.168.1.100">
+              </div>
+              <div class="form-group" style="margin-bottom:12px">
+                <label class="form-label">vLLM API Port</label>
+                <input class="form-input" value="8000">
+              </div>
+              <div class="form-group" style="margin-bottom:12px">
+                <label class="form-label">Open WebUI Port</label>
+                <input class="form-input" value="8080">
+              </div>
+              <div class="form-group" style="margin-bottom:16px">
+                <label class="form-label">vLLM API Key</label>
+                <input class="form-input" type="password" value="local-vllm-secret-key">
+              </div>
+              <button class="btn btn-primary" onclick="showToast('設定已儲存','success')">儲存設定</button>
+              <button class="btn btn-secondary" style="margin-left:8px"
+                onclick="showToast('連線測試中...','info')">測試連線</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end #content -->
+    </div><!-- end #main -->
+  </div><!-- end #app -->
+
+  <!-- ══ MODALS ══ -->
+
+  <!-- RCA Modal -->
+  <div class="modal-bg" id="modal-rca">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">🔍 新增 RCA 分析任務</div>
+        <button class="modal-close" onclick="closeModal('modal-rca')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="job-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Lot ID</label>
+              <input class="form-input" id="rca-lot" placeholder="LOT-240423-XXX" value="LOT-240423-025">
+            </div>
+            <div class="form-group">
+              <label class="form-label">製程</label>
+              <select class="form-input" id="rca-process">
+                <option>MCX A10</option>
+                <option>MW30</option>
+                <option>Wire Bond</option>
+                <option>Final Test</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:10px">
+            <label class="form-label">異常描述</label>
+            <textarea class="form-input" rows="3"
+              placeholder="例：良率從 92% 掉到 78%，集中在 Final Test，WB#3 同時有 bond force alarm...">良率從 92% 掉到 78%，集中在 Final Test，WB#3 同時有 bond force alarm</textarea>
+          </div>
+          <div class="form-row" style="margin-top:10px">
+            <div class="form-group">
+              <label class="form-label">觸發優先級</label>
+              <select class="form-input">
+                <option>🔴 高（立即執行）</option>
+                <option>🟡 中（排隊執行）</option>
+                <option>⚪ 低</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">完成通知</label>
+              <select class="form-input">
+                <option>瀏覽器推播</option>
+                <option>Email</option>
+                <option>兩者都要</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-rca')">取消</button>
+        <button class="btn btn-primary" onclick="submitRCA()">🚀 啟動 9-Agent RCA</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8D Modal -->
+  <div class="modal-bg" id="modal-8d">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">📝 起草 8D 報告</div>
+        <button class="modal-close" onclick="closeModal('modal-8d')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="job-form">
+          <div class="form-group" style="margin-bottom:10px">
+            <label class="form-label">問題描述（D2）</label>
+            <textarea class="form-input" rows="2"
+              placeholder="5W2H 描述問題...">MCX A10 Final Test 良率異常，LOT-240423-018，78.2% vs 目標 85%</textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">客戶 / 來源</label>
+              <input class="form-input" placeholder="內部 / 客戶名稱">
+            </div>
+            <div class="form-group">
+              <label class="form-label">發現日期</label>
+              <input class="form-input" type="date" value="2026-04-23">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-8d')">取消</button>
+        <button class="btn btn-primary" onclick="submit8D()">✨ AI 生成 8D 草稿</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ══ JAVASCRIPT ══ -->
+  <script>
+    // ─── Config ───────────────────────────────────────────────
+    const CONFIG = {
+      serverIP: '192.168.1.100',
+      vllmPort: 8000,
+      webuiPort: 8080,
+      difyPort: 3000,
+      n8nPort: 5678,
+      modelName: 'qwen3.6-35b',
+      vllmApiKey: 'local-vllm-secret-key-change-this', // 與 .env VLLM_API_KEY 一致
+    };
+
+    // ─── State ────────────────────────────────────────────────
+    let currentRole = null;
+    let currentPage = 'dashboard';
+    let currentAgent = 'process_eng';
+
+    const ROLES = {
+      process: { label: '製程工程師', color: '#3b82f6', showKB: false },
+      equipment: { label: '設備工程師', color: '#10b981', showKB: false },
+      quality: { label: '品質工程師', color: '#8b5cf6', showKB: false },
+      admin: { label: '管理員', color: '#f59e0b', showKB: true },
+    };
+
+    // ─── Role Selection ───────────────────────────────────────
+    function selectRole(role) {
+      currentRole = role;
+      const r = ROLES[role];
+      document.getElementById('role-screen').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+      document.getElementById('role-label').textContent = r.label;
+      document.getElementById('role-dot').style.background = r.color;
+      // Show/hide KB section
+      document.getElementById('nav-kb-section').style.display = r.showKB ? '' : 'none';
+      showToast(`歡迎，${r.label}`, 'success');
+      startLiveUpdates();
+    }
+
+    function switchRole() {
+      document.getElementById('app').classList.add('hidden');
+      document.getElementById('role-screen').classList.remove('hidden');
+      stopLiveUpdates();
+    }
+
+    // ─── Navigation ───────────────────────────────────────────
+    function nav(page, el) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      // Show target page
+      const target = document.getElementById('page-' + page);
+      if (target) { target.classList.add('active'); }
+      if (el) { el.classList.add('active'); }
+      currentPage = page;
+
+      const titles = {
+        dashboard: '🏠 Dashboard',
+        assistants: '🤖 AI Assistants',
+        pipeline: '⚡ Pipeline Monitor',
+        reports: '📊 Auto Reports',
+        knowledge: '📚 知識庫管理',
+        settings: '⚙️ 系統設定',
+      };
+      document.getElementById('page-title').textContent = titles[page] || page;
+
+      // Check vLLM connection when entering Assistants page
+      if (page === 'assistants') {
+        checkConnection();
+      }
+    }
+
+    // ─── Agent System Prompts ─────────────────────────────────
+    const AGENT_PROMPTS = {
+      process_eng: `你是一位資深製程工程師助手，專門服務半導體封測廠（OSAT）。
+你熟悉 Wire Bonding、Flip Chip、BGA、QFN 等封裝製程，以及 WAT/CP/FT 測試流程。
+你能協助分析製程異常、解讀 SPC 管制圖、提供 DOE 設計建議、回答關於 bonding 參數、die attach、molding 等問題。
+回答時請引用具體數值與業界標準（如 JEDEC、IPC），並以繁體中文回覆。`,
+
+      rca: `你是一位根本原因分析（RCA）專家助手，專門服務半導體封測廠。
+你擅長使用 8D、5-Why、魚骨圖（Ishikawa）、FMEA 等方法論進行系統性分析。
+你能協助解讀良率數據、分析設備警報、比對歷史製程參數，並產出結構化的 RCA 報告。
+分析時請條理清晰，標明每個推論的證據來源，並以繁體中文回覆。`,
+
+      yield: `你是一位良率分析助手，專門服務半導體封測廠良率改善工作。
+你熟悉 Bin 分析、Wafer Map 解讀、良率失效模式分類（系統性/隨機性/外來汙染）。
+你能協助生成良率趨勢報告、比較 lot-to-lot 差異、提供改善方向建議。
+請以數據驅動的方式分析，並以繁體中文提供清晰的報告摘要。`,
+
+      equipment: `你是一位設備維護助手，專門服務半導體封測廠設備工程師。
+你熟悉 Wire Bonder、Die Bonder、Mold Press、Plasma Cleaner、Trim & Form 等主要設備。
+你能協助解讀設備警報碼、排查異常原因、提供 PM 維護建議、查詢備品更換週期。
+回答時請提供具體的排查步驟，並以繁體中文回覆。`,
+
+      literature: `你是一位技術文獻搜尋助手，專門服務半導體封測技術研發。
+你能協助搜尋、摘要、比較封測相關的技術論文、IEEE 文獻、專利、JEDEC 規範、廠商 Application Note。
+你能解釋技術術語、比較不同方案的優缺點，並以繁體中文提供清晰的文獻摘要。`,
+
+      code: `你是一位程式碼助手，專門服務半導體封測廠的工程師。
+你擅長 Python（pandas, numpy, matplotlib, scikit-learn）、SQL、VBA、Shell Script。
+你能協助撰寫數據分析腳本、自動化報告工具、製程監控程式、ATE 測試程式輔助工具。
+提供程式碼時請加上清晰的繁體中文註解，並考慮工廠現有系統的整合性。`,
+    };
+
+    const AGENT_QUICK_PROMPTS = {
+      process_eng: [
+        'MCX A10 bonding force 標準值是多少？',
+        'BGA 錫球橋接的常見原因有哪些？',
+        '如何設計一個 Wire Bonding DOE？',
+        'Plasma Cleaning 參數對 bonding 的影響？',
+      ],
+      rca: [
+        '請幫我建立一份 8D 報告框架',
+        '如何用 5-Why 分析 bonding open？',
+        '魚骨圖分析 WAT Vt 偏移的可能因素',
+        'FMEA 分析 Mold 製程的風險點',
+      ],
+      yield: [
+        '如何解讀 Wafer Map 的失效分佈？',
+        '良率從 95% 掉到 88%，從哪裡開始排查？',
+        '請生成一份良率週報摘要框架',
+        'Systematic vs Random 良率失效如何區分？',
+      ],
+      equipment: [
+        'Wire Bonder 出現 E-034 警報如何處理？',
+        'Die Bonder 的每週 PM 項目有哪些？',
+        '如何校正 Mold Press 的 clamping force？',
+        'Plasma Cleaner 的 RF power 衰退原因？',
+      ],
+      literature: [
+        '搜尋最新的 Fan-Out Panel Level Packaging 論文',
+        'JEDEC JESD22-A104 測試規範重點',
+        'Copper Wire Bonding 可靠度研究摘要',
+        'Chiplet 封裝技術最新進展',
+      ],
+      code: [
+        '幫我寫一個讀取 WAT CSV 並畫 SPC 圖的 Python 腳本',
+        '如何用 SQL 查詢近 7 天良率低於 90% 的 lot？',
+        '寫一個自動彙整日報 Excel 的 Python 腳本',
+        '如何用 pandas 做 lot-to-lot 製程參數比較？',
+      ],
+    };
+
+    const OFFLINE_REPLIES = {
+      process_eng: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\nMCX A10 Wire Bonder 的 bonding force 標準值通常介於 **18–25 gf**（第一焊點）與 **12–18 gf**（第二焊點），實際值需依 wire 規格（1.0–1.2 mil Au wire）、die pad 材質與 substrate 條件調整。建議參考設備廠商（K&S / ASM）的 Process Guideline，並透過 DOE 驗證最佳視窗。',
+      rca: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\n**8D 報告框架**：\n- D1：組建跨職能團隊（製程、設備、品質）\n- D2：問題描述（5W2H：何時、何地、何物、多少、如何）\n- D3：立即圍堵行動（ICA）\n- D4：根本原因分析（5-Why + 魚骨圖）\n- D5：永久矯正措施（PCA）\n- D6：驗證 PCA 有效性\n- D7：預防再發（橫向展開、FMEA 更新）\n- D8：團隊表揚與結案',
+      yield: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\n良率從 95% 降至 88% 的排查順序：\n1. 確認失效時間點 → 對照製程變更記錄（ECN）\n2. 分析 Wafer Map → 判斷 systematic（邊緣/中心）或 random 分佈\n3. 查看 Bin 分布 → 定位失效類別（電性/機械/外觀）\n4. 比對設備 log → 確認 SPC 是否有異常訊號\n5. 取樣 FA 分析 → 確認失效機制',
+      equipment: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\nWire Bonder E-034 警報通常表示 **EFO（Electric Flame-Off）電流異常**。排查步驟：\n1. 檢查 EFO 棒間距（標準：400–500 μm）\n2. 清潔 EFO 棒，確認無氧化或汙染\n3. 確認 wire clamp 夾力正常\n4. 檢查 tail bond 長度設定\n5. 若持續異常，更換 EFO 棒並重新校正',
+      literature: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\n**Fan-Out Panel Level Packaging (FOPLP)** 近期研究重點：\n- 與 FOWLP 相比，panel 尺寸（600×600mm）可提升 substrate 利用率 3–5 倍\n- 主要挑戰：die shift（<10μm 要求）、warpage 控制、RDL 良率\n- 代表廠商：Samsung FOPLP、ASE SESUB、Fraunhofer IZM\n- 建議搜尋：IEEE ECTC 2024、IMAPS 2024 相關論文',
+      code: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\n```python\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# 讀取 WAT 資料\ndf = pd.read_csv("wat_data.csv")\nparam = "Vt_NMOS"  # 替換為目標參數\n\n# 計算 SPC 管制線\nmean = df[param].mean()\nstd = df[param].std()\nucl, lcl = mean + 3*std, mean - 3*std\n\n# 繪製 X-bar 管制圖\nplt.figure(figsize=(12, 4))\nplt.plot(df[param], "b-o", markersize=4, label=param)\nplt.axhline(mean, color="green", label=f"CL={mean:.4f}")\nplt.axhline(ucl, color="red", linestyle="--", label=f"UCL={ucl:.4f}")\nplt.axhline(lcl, color="red", linestyle="--", label=f"LCL={lcl:.4f}")\nplt.title(f"SPC 管制圖 — {param}")\nplt.legend(); plt.tight_layout(); plt.savefig("spc_chart.png", dpi=150)\nprint("✅ SPC 圖已儲存為 spc_chart.png")\n```',
+    };
+
+    let chatHistory = [];
+    let isStreaming = false;
+
+    // ─── Agent Selection ──────────────────────────────────────
+    function selectAgent(el, name, id) {
+      document.querySelectorAll('.agent-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      currentAgent = id;
+      chatHistory = [];
+      const icon = el.querySelector('.agent-card-icon').textContent;
+      document.getElementById('chat-agent-label').textContent = icon + ' ' + name;
+
+      // Update quick prompts
+      const qpWrap = document.getElementById('quick-prompts');
+      const prompts = AGENT_QUICK_PROMPTS[id] || [];
+      qpWrap.innerHTML = prompts.map(p =>
+        `<button class="qp-btn" onclick="sendQuick(this)">${p}</button>`
+      ).join('');
+
+      // Reset chat area
+      clearChat(true);
+      const emptyEl = document.getElementById('chat-empty');
+      if (emptyEl) {
+        emptyEl.innerHTML = `<div style="font-size:2rem;margin-bottom:.5rem">${icon}</div><div>${name}</div><div style="font-size:.8rem;opacity:.6;margin-top:.25rem">選擇上方快捷提示或輸入問題</div>`;
+      }
+    }
+
+    // ─── Connection Check ─────────────────────────────────────
+    async function checkConnection() {
+      const badge = document.getElementById('chat-conn-badge');
+      try {
+        const res = await fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/health`, {
+          method: 'GET', signal: AbortSignal.timeout(3000)
+        });
+        if (res.ok) {
+          badge.textContent = '● 已連線';
+          badge.className = 'chat-conn-badge online';
+          return true;
+        }
+      } catch (_) { }
+      badge.textContent = '● 未連線';
+      badge.className = 'chat-conn-badge offline';
+      return false;
+    }
+
+    // ─── Chat Engine ──────────────────────────────────────────
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function appendMsg(role, text, streaming = false) {
+      const msgs = document.getElementById('chat-msgs');
+      const empty = document.getElementById('chat-empty');
+      if (empty) empty.style.display = 'none';
+      const qp = document.getElementById('quick-prompts');
+      if (qp) qp.style.display = 'none';
+
+      const div = document.createElement('div');
+      div.className = `msg ${role}`;
+      const avatar = role === 'user' ? '👤' : '🤖';
+      const pre = document.createElement('pre');
+      pre.style.cssText = 'margin:0;white-space:pre-wrap;word-break:break-word;font-family:inherit';
+      pre.textContent = text;
+      div.innerHTML = `<div class="msg-avatar">${avatar}</div>`;
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.appendChild(pre);
+      div.appendChild(bubble);
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+      return pre; // return for streaming updates
+    }
+
+    function showTyping() {
+      const msgs = document.getElementById('chat-msgs');
+      const div = document.createElement('div');
+      div.className = 'msg ai';
+      div.id = 'typing-indicator';
+      div.innerHTML = `<div class="msg-avatar">🤖</div><div class="msg-bubble"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function removeTyping() {
+      const t = document.getElementById('typing-indicator');
+      if (t) t.remove();
+    }
+
+    async function sendChat() {
+      if (isStreaming) return;
+      const input = document.getElementById('chat-input');
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      input.value = '';
+      input.style.height = 'auto';
+      isStreaming = true;
+      document.getElementById('chat-send').disabled = true;
+
+      appendMsg('user', userText);
+      chatHistory.push({ role: 'user', content: userText });
+
+      const online = await checkConnection();
+      if (!online) {
+        showTyping();
+        await new Promise(r => setTimeout(r, 800));
+        removeTyping();
+        const reply = OFFLINE_REPLIES[currentAgent] || '⚠️ AI 伺服器未連線，請確認伺服器狀態後重試。';
+        appendMsg('ai', reply);
+        chatHistory.push({ role: 'assistant', content: reply });
+        isStreaming = false;
+        document.getElementById('chat-send').disabled = false;
+        return;
+      }
+
+      showTyping();
+
+      const messages = [
+        { role: 'system', content: AGENT_PROMPTS[currentAgent] || '' },
+        ...chatHistory,
+      ];
+
+      try {
+        const res = await fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/v1/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${CONFIG.vllmApiKey}`,
+          },
+          body: JSON.stringify({
+            model: CONFIG.modelName,
+            messages,
+            stream: true,
+            max_tokens: 2048,
+            temperature: 0.6,
+          }),
+        });
+
+        removeTyping();
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const textNode = appendMsg('ai', '');
+        let fullReply = '';
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          for (const line of chunk.split('\n')) {
+            if (!line.startsWith('data: ')) continue;
+            const data = line.slice(6).trim();
+            if (data === '[DONE]') break;
+            try {
+              const json = JSON.parse(data);
+              const delta = json.choices?.[0]?.delta?.content || '';
+              fullReply += delta;
+              textNode.textContent = fullReply;
+              document.getElementById('chat-msgs').scrollTop = document.getElementById('chat-msgs').scrollHeight;
+            } catch (_) { }
+          }
+        }
+        chatHistory.push({ role: 'assistant', content: fullReply });
+
+      } catch (err) {
+        removeTyping();
+        appendMsg('ai', `❌ 連線錯誤：${err.message}\n請確認 vLLM 伺服器正在運行（http://${CONFIG.serverIP}:${CONFIG.vllmPort}）`);
+      }
+
+      isStreaming = false;
+      document.getElementById('chat-send').disabled = false;
+    }
+
+    function sendQuick(btn) {
+      const input = document.getElementById('chat-input');
+      input.value = btn.textContent;
+      sendChat();
+    }
+
+    function chatKeydown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendChat();
+      }
+    }
+
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+    }
+
+    function clearChat(silent = false) {
+      chatHistory = [];
+      const msgs = document.getElementById('chat-msgs');
+      msgs.innerHTML = '';
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'chat-empty';
+      emptyDiv.id = 'chat-empty';
+      const agentIcons = { process_eng: '⚗️', rca: '🔬', yield: '📊', equipment: '🔧', literature: '📚', code: '💻' };
+      const agentNames = { process_eng: '製程工程師助手', rca: 'RCA 分析助手', yield: '良率報告助手', equipment: '設備維護助手', literature: '技術文獻搜尋', code: '程式碼助手' };
+      const icon = agentIcons[currentAgent] || '🤖';
+      const name = agentNames[currentAgent] || '助手';
+      emptyDiv.innerHTML = `<div style="font-size:2rem;margin-bottom:.5rem">${icon}</div><div>${name}</div><div style="font-size:.8rem;opacity:.6;margin-top:.25rem">選擇上方快捷提示或輸入問題</div>`;
+      msgs.appendChild(emptyDiv);
+      const qp = document.getElementById('quick-prompts');
+      if (qp) qp.style.display = 'flex';
+      if (!silent) showToast('對話已清除', 'info');
+    }
+
+    // ─── Modals ───────────────────────────────────────────────
+    function openRCAModal() {
+      document.getElementById('modal-rca').classList.add('open');
+    }
+    function open8DModal() {
+      document.getElementById('modal-8d').classList.add('open');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    function submitRCA() {
+      const lot = document.getElementById('rca-lot').value;
+      closeModal('modal-rca');
+      showToast(`🚀 RCA 任務已提交：${lot}，9-Agent Pipeline 啟動中...`, 'success');
+      // Update badge
+      const badge = document.getElementById('pipeline-badge');
+      badge.textContent = parseInt(badge.textContent) + 1;
+      // Append to log
+      appendLog(`[${getTime()}] → 新 RCA 任務加入佇列：${lot}`);
+    }
+
+    function submit8D() {
+      closeModal('modal-8d');
+      showToast('✨ AI 正在生成 8D 報告草稿，請稍候...', 'info');
+    }
+
+    // ─── Toast ───────────────────────────────────────────────
+    function showToast(msg, type = 'info') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `toast ${type} show`;
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => { t.classList.remove('show'); }, 3500);
+    }
+
+    // ─── Log ─────────────────────────────────────────────────
+    function appendLog(line) {
+      const log = document.getElementById('pipeline-log');
+      if (!log) return;
+      const div = document.createElement('div');
+      div.innerHTML = `<span class="log-ts">[${getTime()}]</span> <span class="log-run">→</span> <span class="log-info">${line}</span>`;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function getTime() {
+      return new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    // ─── Live Updates (simulate WebSocket) ───────────────────
+    let _liveInterval = null;
+    let _gpuVal = 68;
+    let _rcaProgress = 67;
+
+    function startLiveUpdates() {
+      _liveInterval = setInterval(() => {
+        // GPU fluctuation
+        _gpuVal += (Math.random() - 0.5) * 6;
+        _gpuVal = Math.max(55, Math.min(92, _gpuVal));
+        const gpuRound = Math.round(_gpuVal);
+        document.getElementById('stat-gpu').textContent = gpuRound + '%';
+        document.getElementById('gpu-live').textContent = gpuRound + '%';
+        const barGpu = document.getElementById('bar-gpu');
+        if (barGpu) barGpu.style.width = gpuRound + '%';
+
+        // VRAM: model weight ~21GB + KV cache proportional
+        const vram = Math.round(21 + (_gpuVal / 100) * 50);
+        document.getElementById('vram-live').textContent = `${vram}/96 GB`;
+
+        // RCA progress (slow advance)
+        if (_rcaProgress < 100) {
+          _rcaProgress += Math.random() * 1.5;
+          _rcaProgress = Math.min(100, _rcaProgress);
+          const bar = document.getElementById('rca-progress');
+          if (bar) bar.style.width = Math.round(_rcaProgress) + '%';
+          if (_rcaProgress >= 100) {
+            showToast('✅ LOT-240423-018 RCA 分析完成！MRAT 報告已生成。', 'success');
+            document.getElementById('pipeline-badge').textContent = '1';
+          }
+        }
+      }, 2000);
+    }
+
+    function stopLiveUpdates() {
+      clearInterval(_liveInterval);
+    }
+
+    function refreshData() {
+      showToast('正在更新數據...', 'info');
+    }
+
+    // ─── Keyboard shortcuts ───────────────────────────────────
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-bg.open').forEach(m => m.classList.remove('open'));
+      }
+    });
+
+    // Close modal on background click
+    document.querySelectorAll('.modal-bg').forEach(bg => {
+      bg.addEventListener('click', e => {
+        if (e.target === bg) bg.classList.remove('open');
+      });
+    });
+  </script>
+</body>
+
+</html>
