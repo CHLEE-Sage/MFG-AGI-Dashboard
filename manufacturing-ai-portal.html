@@ -10,30 +10,66 @@
    設計系統 — CSS Variables
    ============================================================ */
     :root {
-      --brand-900: #0f172a;
-      --brand-800: #1e293b;
-      --brand-700: #334155;
-      --brand-500: #1d4ed8;
-      --brand-400: #3b82f6;
-      --brand-100: #dbeafe;
+      /* ── Apple Design System Tokens ── */
+      --primary:           #0066cc;
+      --primary-focus:     #0071e3;
+      --primary-on-dark:   #2997ff;
+      --ink:               #1d1d1f;
+      --ink-muted-80:      #333333;
+      --ink-muted-48:      #7a7a7a;
+      --body-muted:        #cccccc;
+      --canvas:            #ffffff;
+      --canvas-parchment:  #f5f5f7;
+      --surface-pearl:     #fafafc;
+      --surface-tile-1:    #272729;
+      --surface-tile-2:    #2a2a2c;
+      --surface-black:     #000000;
+      --surface-chip:      #d2d2d7;
+      --divider-soft:      #f0f0f0;
+      --hairline:          #e0e0e0;
+      --on-dark:           #ffffff;
 
+      /* ── Radius Scale ── */
+      --radius-xs:   5px;
+      --radius-sm:   8px;
+      --radius-md:   11px;
+      --radius-lg:   18px;
+      --radius-pill: 9999px;
+      --radius:      18px;
+
+      /* ── Spacing ── */
+      --spacing-xxs: 4px;
+      --spacing-xs:  8px;
+      --spacing-sm:  12px;
+      --spacing-md:  17px;
+      --spacing-lg:  24px;
+      --spacing-xl:  32px;
+      --spacing-xxl: 48px;
+
+      /* ── Functional Status Colors ── */
       --green-500: #10b981;
       --green-100: #d1fae5;
       --amber-500: #f59e0b;
       --amber-100: #fef3c7;
-      --red-500: #ef4444;
-      --red-100: #fee2e2;
-      --purple-500: #8b5cf6;
-      --purple-100: #ede9fe;
-      --slate-400: #94a3b8;
-      --slate-200: #e2e8f0;
-      --slate-100: #f1f5f9;
-      --slate-50: #f8fafc;
+      --red-500:   #ef4444;
+      --red-100:   #fee2e2;
+
+      /* ── Backward-compat aliases ── */
+      --brand-900: #000000;
+      --brand-800: #1d1d1f;
+      --brand-700: #333333;
+      --brand-500: #0066cc;
+      --brand-400: #2997ff;
+      --brand-100: rgba(0,102,204,0.08);
+      --slate-400: #7a7a7a;
+      --slate-300: #d2d2d7;
+      --slate-200: #e0e0e0;
+      --slate-100: #f5f5f7;
+      --slate-50:  #fafafc;
 
       --sidebar-w: 220px;
-      --header-h: 52px;
-      --radius: 8px;
-      --shadow: 0 1px 4px rgba(0, 0, 0, .08), 0 4px 12px rgba(0, 0, 0, .05);
+      --header-h:  44px;
+      --shadow:    none;
     }
 
     /* ── Reset ── */
@@ -46,11 +82,12 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif;
-      background: var(--slate-100);
-      color: var(--brand-900);
+      font-family: "SF Pro Text", system-ui, -apple-system, BlinkMacSystemFont, 'Noto Sans TC', sans-serif;
+      background: var(--canvas-parchment);
+      color: var(--ink);
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.47;
+      letter-spacing: -0.224px;
     }
 
     button {
@@ -1718,6 +1755,545 @@
 
     .text-amber {
       color: var(--amber-500);
+    }
+
+    /* ============================================================
+       APPLE DESIGN SYSTEM OVERRIDES
+       SF Pro · Action Blue · Pill Grammar · Hairline Cards
+    ============================================================ */
+
+    /* ── Role Selection Screen ── */
+    #role-screen {
+      background: var(--surface-black);
+    }
+
+    .role-logo h1 {
+      font-family: "SF Pro Display", system-ui, -apple-system, sans-serif;
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .role-logo p {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--body-muted);
+      margin-top: 6px;
+    }
+
+    .role-logo .badge {
+      background: rgba(41,151,255,.15);
+      border-color: rgba(41,151,255,.35);
+      color: var(--primary-on-dark);
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      padding: 3px 12px;
+    }
+
+    .role-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius-lg);
+      transition: background .15s, border-color .15s, transform .15s;
+    }
+
+    .role-card:hover {
+      background: rgba(255,255,255,.09);
+      border-color: rgba(0,102,204,.55);
+      transform: translateY(-2px);
+    }
+
+    .role-card .title {
+      font-family: "SF Pro Text", system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.224px;
+    }
+
+    .role-card .desc {
+      font-size: 12px;
+      color: var(--ink-muted-48);
+    }
+
+    .role-card .app-pill {
+      background: rgba(255,255,255,.07);
+      color: var(--body-muted);
+      border-radius: var(--radius-pill);
+    }
+
+    /* ── Sidebar — Apple Global Nav ── */
+    #sidebar {
+      background: var(--surface-black);
+    }
+
+    .sidebar-logo .name {
+      font-family: "SF Pro Display", system-ui, -apple-system, sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: -0.12px;
+    }
+
+    .nav-item {
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      letter-spacing: -0.12px;
+    }
+
+    .nav-item.active {
+      background: var(--primary);
+    }
+
+    /* ── Header ── */
+    #header {
+      height: var(--header-h);
+      background: var(--canvas);
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .header-title {
+      font-family: "SF Pro Display", system-ui, -apple-system, sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.374px;
+      color: var(--ink);
+    }
+
+    .icon-btn {
+      background: var(--canvas-parchment);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+    }
+
+    .icon-btn:hover {
+      background: var(--hairline);
+    }
+
+    .switch-role-btn {
+      background: var(--canvas-parchment);
+      border: 1px solid var(--hairline);
+      color: var(--ink);
+      border-radius: var(--radius-pill);
+    }
+
+    .switch-role-btn:hover {
+      background: var(--hairline);
+    }
+
+    /* ── Content Background ── */
+    #content {
+      background: var(--canvas-parchment);
+    }
+
+    /* ── Section Typography ── */
+    .section-title {
+      font-family: "SF Pro Display", system-ui, -apple-system, sans-serif;
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: 0.231px;
+      color: var(--ink);
+    }
+
+    .section-sub {
+      color: var(--ink-muted-48);
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-lg);
+      box-shadow: none;
+    }
+
+    .card-header {
+      border-bottom: 1px solid var(--divider-soft);
+    }
+
+    .card-title {
+      font-family: "SF Pro Display", system-ui, -apple-system, sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.374px;
+      color: var(--ink);
+    }
+
+    .card-action {
+      color: var(--primary);
+      border-radius: var(--radius-pill);
+    }
+
+    .card-action:hover {
+      background: rgba(0,102,204,.06);
+    }
+
+    .stat-card {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-lg);
+      box-shadow: none;
+    }
+
+    .stat-value {
+      font-family: "SF Pro Display", system-ui, -apple-system, sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.28px;
+      color: var(--ink);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: -0.12px;
+      color: var(--ink-muted-48);
+      text-transform: none;
+    }
+
+    .stat-sub {
+      color: var(--ink-muted-48);
+    }
+
+    /* ── Buttons — Apple Pill Grammar ── */
+    .btn {
+      border-radius: var(--radius-pill);
+      font-family: "SF Pro Text", system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: -0.224px;
+      padding: 8px 18px;
+      transition: transform .1s ease, background .12s;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-dark);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-focus);
+    }
+
+    .btn-secondary {
+      background: var(--canvas);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--canvas-parchment);
+    }
+
+    .btn-sm {
+      padding: 5px 14px;
+      font-size: 12px;
+    }
+
+    /* ── Tables ── */
+    .data-table th {
+      background: var(--surface-pearl);
+      color: var(--ink-muted-48);
+      border-bottom: 1px solid var(--hairline);
+      text-transform: none;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -0.12px;
+    }
+
+    .data-table td {
+      border-bottom: 1px solid var(--divider-soft);
+      color: var(--ink);
+    }
+
+    .data-table tr:hover td {
+      background: var(--surface-pearl);
+    }
+
+    /* ── AGI Agent Cards ── */
+    .agent-card {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-lg);
+    }
+
+    .agent-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0,102,204,.08);
+    }
+
+    .agent-card.selected {
+      border-color: var(--primary);
+      background: rgba(0,102,204,.04);
+    }
+
+    .agent-card-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.224px;
+      color: var(--ink);
+    }
+
+    .agent-card-desc {
+      color: var(--ink-muted-48);
+    }
+
+    .tag {
+      background: var(--canvas-parchment);
+      color: var(--ink-muted-48);
+      border-radius: var(--radius-pill);
+    }
+
+    /* ── Quick Actions ── */
+    .qa-btn {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-lg);
+      color: var(--ink);
+    }
+
+    .qa-btn:hover {
+      background: var(--canvas-parchment);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* ── Chat Shell ── */
+    .chat-shell {
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-lg);
+      box-shadow: none;
+    }
+
+    .chat-topbar {
+      background: var(--surface-tile-1);
+    }
+
+    .chat-msgs {
+      background: var(--canvas-parchment);
+    }
+
+    .chat-input {
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-pill);
+      background: var(--canvas);
+      color: var(--ink);
+    }
+
+    .chat-input:focus {
+      border-color: var(--primary-focus);
+      box-shadow: 0 0 0 3px rgba(0,113,227,.10);
+      background: var(--canvas);
+    }
+
+    .chat-send {
+      background: var(--primary);
+      border-radius: var(--radius-pill);
+      width: 44px;
+      height: 44px;
+    }
+
+    .chat-send:hover {
+      background: var(--primary-focus);
+    }
+
+    .chat-clear {
+      background: var(--canvas-parchment);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-pill);
+      color: var(--ink-muted-48);
+      width: 44px;
+      height: 44px;
+    }
+
+    .chat-clear:hover {
+      background: var(--red-100);
+      color: var(--red-500);
+    }
+
+    .msg.user .msg-bubble {
+      background: var(--primary);
+      color: var(--on-dark);
+    }
+
+    .msg.AGI .msg-bubble {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      color: var(--ink);
+    }
+
+    .quick-prompts {
+      border-top: 1px solid var(--divider-soft);
+      background: var(--canvas);
+    }
+
+    .qp-btn {
+      background: var(--canvas-parchment);
+      border: 1px solid var(--hairline);
+      color: var(--primary);
+      border-radius: var(--radius-pill);
+      font-weight: 400;
+    }
+
+    .qp-btn:hover {
+      background: var(--canvas);
+      border-color: var(--primary);
+    }
+
+    /* ── Forms ── */
+    .form-input {
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-sm);
+      background: var(--canvas);
+      color: var(--ink);
+    }
+
+    .form-input:focus {
+      border-color: var(--primary-focus);
+      box-shadow: 0 0 0 3px rgba(0,113,227,.10);
+    }
+
+    .form-label {
+      color: var(--ink-muted-48);
+      text-transform: none;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -0.12px;
+    }
+
+    .job-form {
+      background: var(--surface-pearl);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-lg);
+    }
+
+    /* ── Pipeline DAG ── */
+    .dag-contAGIner {
+      background: var(--surface-pearl);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-lg);
+    }
+
+    .agent-node {
+      background: var(--canvas);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-sm);
+    }
+
+    .agent-node.status-running {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0,102,204,.12);
+    }
+
+    .agent-node.status-done {
+      border-color: var(--green-500);
+    }
+
+    .agent-node.status-failed {
+      border-color: var(--red-500);
+    }
+
+    /* ── Upload Zone ── */
+    .upload-zone {
+      border: 2px dashed var(--hairline);
+      border-radius: var(--radius-lg);
+      background: var(--surface-pearl);
+    }
+
+    .upload-zone:hover {
+      border-color: var(--primary);
+      background: rgba(0,102,204,.04);
+    }
+
+    /* ── Modal ── */
+    .modal {
+      border-radius: var(--radius-lg);
+    }
+
+    .modal-header {
+      border-bottom: 1px solid var(--divider-soft);
+    }
+
+    .modal-title {
+      font-family: "SF Pro Display", system-ui, -apple-system, sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.374px;
+    }
+
+    .modal-close {
+      background: var(--canvas-parchment);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+    }
+
+    .modal-footer {
+      border-top: 1px solid var(--divider-soft);
+    }
+
+    /* ── Toast ── */
+    .toast {
+      background: var(--ink);
+      border-radius: var(--radius-lg);
+    }
+
+    .toast.success { border-left: 3px solid var(--green-500); }
+    .toast.info    { border-left: 3px solid var(--primary); }
+    .toast.warn    { border-left: 3px solid var(--amber-500); }
+
+    /* ── Toggle ── */
+    .toggle.on { background: var(--primary); }
+
+    /* ── Progress ── */
+    .progress-bar.blue { background: var(--primary); }
+    .progress-wrap     { background: var(--hairline); }
+
+    /* ── Chips / src chips ── */
+    .src-chip {
+      background: var(--canvas-parchment);
+      border: 1px solid var(--hairline);
+      color: var(--ink-muted-48);
+      border-radius: var(--radius-xs);
+    }
+
+    /* ── Alarm items ── */
+    .alarm-equip { color: var(--ink); }
+    .alarm-desc  { color: var(--ink-muted-48); }
+    .alarm-time  { color: var(--ink-muted-48); }
+    .alarm-item  { border-bottom: 1px solid var(--divider-soft); }
+
+    /* ── KB docs ── */
+    .kb-doc-name  { color: var(--ink); }
+    .kb-doc-meta  { color: var(--ink-muted-48); }
+    .kb-doc-row   { border-bottom: 1px solid var(--divider-soft); }
+
+    /* ── Report rows ── */
+    .report-name { color: var(--ink); }
+    .report-meta { color: var(--ink-muted-48); }
+    .report-row  { border-bottom: 1px solid var(--divider-soft); }
+
+    /* ── Schedule items ── */
+    .schedule-item { border-bottom: 1px solid var(--divider-soft); }
+
+    /* ── Log terminal — keep dark, just align radius ── */
+    .log-term { border-radius: var(--radius-sm); }
+
+    /* ── Chat empty state ── */
+    .chat-empty .e-title { color: var(--ink); }
+    .chat-empty .e-hint {
+      background: var(--amber-100);
+      border: 1px solid #fde68a;
+      border-radius: var(--radius-sm);
+    }
+
+    /* ── Nav badge ── */
+    .nav-label {
+      font-size: 10px;
+      letter-spacing: 0.4px;
+      color: rgba(255,255,255,.28);
     }
   </style>
 </head>
