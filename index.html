@@ -426,8 +426,8 @@
       background: var(--slate-200);
     }
 
-    /* ── MAGIn Content ── */
-    #mAGIn {
+    /* ── Main Content ── */
+    #main {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -578,7 +578,7 @@
       color: #7f1d1d;
     }
 
-    .pill.wAGIting {
+    .pill.waiting {
       background: var(--amber-100);
       color: #78350f;
     }
@@ -889,7 +889,7 @@
    ============================================================ */
 
     /* DAG visualization */
-    .dag-contAGIner {
+    .dag-container {
       background: var(--slate-50);
       border: 1px solid var(--slate-200);
       border-radius: var(--radius);
@@ -936,7 +936,7 @@
       box-shadow: 0 0 0 3px rgba(59, 130, 246, .15);
     }
 
-    .agent-node.status-wAGIting {
+    .agent-node.status-waiting {
       border-color: var(--slate-200);
       opacity: .7;
     }
@@ -2171,7 +2171,7 @@
     }
 
     /* ── Pipeline DAG ── */
-    .dag-contAGIner {
+    .dag-container {
       background: var(--surface-pearl);
       border: 1px solid var(--hairline);
       border-radius: var(--radius-lg);
@@ -2408,8 +2408,8 @@
       </div>
     </nav>
 
-    <!-- MAGIn -->
-    <div id="mAGIn">
+    <!-- Main -->
+    <div id="main">
       <div id="header">
         <div class="header-title" id="page-title">Dashboard</div>
         <div class="header-actions">
@@ -2767,7 +2767,7 @@
               </div>
 
               <!-- 9-Agent DAG -->
-              <div class="dag-contAGIner">
+              <div class="dag-container">
                 <div class="dag-wrap">
                   <!-- Row 1: Trigger -->
                   <div class="dag-row">
@@ -2816,25 +2816,25 @@
 
                   <!-- Row 4: Risk + CAP -->
                   <div class="dag-row">
-                    <div class="agent-node status-wAGIting">
+                    <div class="agent-node status-waiting">
                       <div class="agent-id">A6</div>
                       <div class="agent-name">風險評估 (Risk)</div>
-                      <div class="agent-stat"><span class="pill wAGIting" style="font-size:9px">⌛ 等待</span></div>
+                      <div class="agent-stat"><span class="pill waiting" style="font-size:9px">⌛ 等待</span></div>
                     </div>
-                    <div class="agent-node status-wAGIting">
+                    <div class="agent-node status-waiting">
                       <div class="agent-id">A7</div>
                       <div class="agent-name">矯正措施 (CAP)</div>
-                      <div class="agent-stat"><span class="pill wAGIting" style="font-size:9px">⌛ 等待</span></div>
+                      <div class="agent-stat"><span class="pill waiting" style="font-size:9px">⌛ 等待</span></div>
                     </div>
                   </div>
                   <div class="dag-arrow">↓</div>
 
                   <!-- Row 5: Report -->
                   <div class="dag-row">
-                    <div class="agent-node status-wAGIting">
+                    <div class="agent-node status-waiting">
                       <div class="agent-id">A8</div>
                       <div class="agent-name">MRAT 報告 & 通知</div>
-                      <div class="agent-stat"><span class="pill wAGIting" style="font-size:9px">⌛ 等待</span></div>
+                      <div class="agent-stat"><span class="pill waiting" style="font-size:9px">⌛ 等待</span></div>
                     </div>
                   </div>
                 </div>
@@ -3207,7 +3207,7 @@
         </div>
 
       </div><!-- end #content -->
-    </div><!-- end #mAGIn -->
+    </div><!-- end #main -->
   </div><!-- end #app -->
 
   <!-- ══ MODALS ══ -->
@@ -3487,7 +3487,7 @@
     async function checkConnection() {
       const badge = document.getElementById('chat-conn-badge');
       try {
-        const res = awAGIt fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/health`, {
+        const res = await fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/health`, {
           method: 'GET', signal: AbortSignal.timeout(3000)
         });
         if (res.ok) {
@@ -3558,10 +3558,10 @@
       appendMsg('user', userText);
       chatHistory.push({ role: 'user', content: userText });
 
-      const online = awAGIt checkConnection();
+      const online = await checkConnection();
       if (!online) {
         showTyping();
-        awAGIt new Promise(r => setTimeout(r, 800));
+        await new Promise(r => setTimeout(r, 800));
         removeTyping();
         const reply = OFFLINE_REPLIES[currentAgent] || '⚠️ AGI 伺服器未連線，請確認伺服器狀態後重試。';
         appendMsg('AGI', reply);
@@ -3579,7 +3579,7 @@
       ];
 
       try {
-        const res = awAGIt fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/v1/chat/completions`, {
+        const res = await fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/v1/chat/completions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -3603,7 +3603,7 @@
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         while (true) {
-          const { done, value } = awAGIt reader.read();
+          const { done, value } = await reader.read();
           if (done) break;
           const chunk = decoder.decode(value, { stream: true });
           for (const line of chunk.split('\n')) {
