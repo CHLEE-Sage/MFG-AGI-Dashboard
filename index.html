@@ -3985,72 +3985,37 @@
       appendMsg('user', userText);
       chatHistory.push({ role: 'user', content: userText });
 
-      const online = await checkConnection();
-      if (!online) {
-        showTyping();
-        await new Promise(r => setTimeout(r, 800));
-        removeTyping();
-        const reply = OFFLINE_REPLIES[currentAgent] || '⚠️ AGI 伺服器未連線，請確認伺服器狀態後重試。';
-        appendMsg('AGI', reply);
-        chatHistory.push({ role: 'assistant', content: reply });
-        isStreaming = false;
-        document.getElementById('chat-send').disabled = false;
-        return;
-      }
-
       showTyping();
 
-      const messages = [
-        { role: 'system', content: AGENT_PROMPTS[currentAgent] || '' },
-        ...chatHistory,
-      ];
+      const systemPrompt = AGENT_PROMPTS[currentAgent] || '你是一個有幫助的製造業 AI 助手。';
+      const messages = chatHistory.filter(m => m.role !== 'system');
 
       try {
-        const res = await fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/v1/chat/completions`, {
+        const res = await fetch('/api/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${CONFIG.vllmApiKey}`,
           },
           body: JSON.stringify({
-            model: CONFIG.modelName,
             messages,
-            stream: true,
-            max_tokens: 2048,
-            temperature: 0.6,
+            systemPrompt,
           }),
         });
 
         removeTyping();
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        const textNode = appendMsg('AGI', '');
-        let fullReply = '';
+        const data = await res.json();
+        const fullReply = data.content?.[0]?.text || '❌ 無法解析回應';
 
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder();
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          for (const line of chunk.split('\n')) {
-            if (!line.startsWith('data: ')) continue;
-            const data = line.slice(6).trim();
-            if (data === '[DONE]') break;
-            try {
-              const json = JSON.parse(data);
-              const delta = json.choices?.[0]?.delta?.content || '';
-              fullReply += delta;
-              textNode.textContent = fullReply;
-              document.getElementById('chat-msgs').scrollTop = document.getElementById('chat-msgs').scrollHeight;
-            } catch (_) { }
-          }
-        }
+        const textNode = appendMsg('AGI', fullReply);
         chatHistory.push({ role: 'assistant', content: fullReply });
+
+        document.getElementById('chat-msgs').scrollTop = document.getElementById('chat-msgs').scrollHeight;
 
       } catch (err) {
         removeTyping();
-        appendMsg('AGI', `❌ 連線錯誤：${err.message}\n請確認 vLLM 伺服器正在運行（http://${CONFIG.serverIP}:${CONFIG.vllmPort}）`);
+        appendMsg('AGI', `❌ 連線錯誤：${err.message}\n請稍候重試。`);
       }
 
       isStreaming = false;
