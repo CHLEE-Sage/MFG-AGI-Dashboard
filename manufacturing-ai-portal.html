@@ -2289,6 +2289,93 @@
       border-radius: var(--radius-sm);
     }
 
+    /* ── Header Nav Buttons ── */
+    .header-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      font-family: "SF Pro Text", system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: -0.12px;
+      cursor: pointer;
+      border: 1px solid var(--hairline);
+      background: var(--canvas-parchment);
+      color: var(--ink);
+      text-decoration: none;
+      transition: background .12s, transform .1s;
+    }
+
+    .header-nav-btn:hover { background: var(--hairline); }
+    .header-nav-btn:active { transform: scale(0.95); }
+
+    .header-nav-btn--primary {
+      background: var(--primary);
+      color: var(--on-dark);
+      border-color: transparent;
+    }
+
+    .header-nav-btn--primary:hover { background: var(--primary-focus); }
+
+    body.dark .header-nav-btn {
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.12);
+      color: #f5f5f7;
+    }
+
+    body.dark .header-nav-btn:hover { background: rgba(255,255,255,.14); }
+
+    body.dark .header-nav-btn--primary {
+      background: #2997ff;
+      border-color: transparent;
+      color: #fff;
+    }
+
+    body.dark .header-nav-btn--primary:hover { background: #409cff; }
+
+    /* ── Login Modal ── */
+    #login-modal .modal {
+      width: min(400px, 94vw);
+    }
+
+    .login-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .login-field label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-muted-48);
+      letter-spacing: -0.12px;
+    }
+
+    .login-field input {
+      padding: 10px 14px;
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: "SF Pro Text", system-ui, -apple-system, sans-serif;
+      background: var(--canvas);
+      color: var(--ink);
+      outline: none;
+      transition: border-color .12s, box-shadow .12s;
+    }
+
+    .login-field input:focus {
+      border-color: var(--primary-focus);
+      box-shadow: 0 0 0 3px rgba(0,113,227,.10);
+    }
+
+    body.dark .login-field input {
+      background: #272729;
+      border-color: rgba(255,255,255,.12);
+      color: #f5f5f7;
+    }
+
     /* ── Nav badge ── */
     .nav-label {
       font-size: 10px;
@@ -2623,7 +2710,8 @@
           <button class="icon-btn" title="通知">🔔</button>
           <button class="icon-btn" title="重新整理" onclick="refreshData()">🔄</button>
           <button class="icon-btn theme-toggle" id="theme-toggle-btn" title="切換深色/淺色" onclick="toggleTheme()">🌙</button>
-          <button class="switch-role-btn" onclick="switchRole()">切換角色</button>
+          <a href="about.html" target="_blank" class="header-nav-btn">About</a>
+          <button class="header-nav-btn header-nav-btn--primary" onclick="openLoginModal()">Login</button>
         </div>
       </div>
 
@@ -3420,6 +3508,39 @@
 
   <!-- ══ MODALS ══ -->
 
+  <!-- Login Modal -->
+  <div class="modal-bg" id="login-modal">
+    <div class="modal" style="width:min(400px,94vw)">
+      <div class="modal-header">
+        <span class="modal-title">登入系統</span>
+        <button class="modal-close" onclick="closeLoginModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="text-align:center; margin-bottom:20px;">
+          <div style="font-size:36px; margin-bottom:8px;">🏭</div>
+          <div style="font-family:'SF Pro Display',system-ui,-apple-system,sans-serif; font-size:17px; font-weight:600; color:var(--ink); letter-spacing:-0.374px;">Manufacturing AGI Portal</div>
+          <div style="font-size:13px; color:var(--ink-muted-48); margin-top:4px;">AT · SmartManufacturing AGI Platform</div>
+        </div>
+        <div class="login-field">
+          <label>帳號</label>
+          <input type="text" id="login-user" placeholder="工號或帳號" autocomplete="username">
+        </div>
+        <div class="login-field">
+          <label>密碼</label>
+          <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+          <input type="checkbox" id="login-remember" style="accent-color:var(--primary); width:14px; height:14px;">
+          <label for="login-remember" style="font-size:12px; color:var(--ink-muted-48); cursor:pointer;">記住此裝置</label>
+        </div>
+      </div>
+      <div class="modal-footer" style="flex-direction:column; gap:8px;">
+        <button class="btn btn-primary" style="width:100%; justify-content:center; padding:12px;" onclick="submitLogin()">登入</button>
+        <p style="font-size:11px; color:var(--ink-muted-48); text-align:center;">忘記密碼請聯繫 IT 管理員</p>
+      </div>
+    </div>
+  </div>
+
   <!-- RCA Modal -->
   <div class="modal-bg" id="modal-rca">
     <div class="modal">
@@ -3514,6 +3635,29 @@
 
   <!-- ══ JAVASCRIPT ══ -->
   <script>
+    // ─── Login Modal ──────────────────────────────────────────
+    function openLoginModal() {
+      document.getElementById('login-modal').classList.add('open');
+      setTimeout(() => document.getElementById('login-user').focus(), 100);
+    }
+
+    function closeLoginModal() {
+      document.getElementById('login-modal').classList.remove('open');
+    }
+
+    function submitLogin() {
+      const user = document.getElementById('login-user').value.trim();
+      const pass = document.getElementById('login-pass').value;
+      if (!user || !pass) { showToast('請填寫帳號與密碼', 'warn'); return; }
+      closeLoginModal();
+      showToast(`✓ 已登入：${user}`, 'success');
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLoginModal();
+      if (e.key === 'Enter' && document.getElementById('login-modal').classList.contains('open')) submitLogin();
+    });
+
     // ─── Theme Toggle ─────────────────────────────────────────
     function toggleTheme() {
       const isDark = document.body.classList.toggle('dark');
