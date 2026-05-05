@@ -2295,6 +2295,213 @@
       letter-spacing: 0.4px;
       color: rgba(255,255,255,.28);
     }
+
+    /* ============================================================
+       DARK MODE — Apple near-black tile system
+    ============================================================ */
+    body.dark {
+      --canvas:           #272729;
+      --canvas-parchment: #1d1d1f;
+      --surface-pearl:    #2a2a2c;
+      --divider-soft:     rgba(255,255,255,.08);
+      --hairline:         rgba(255,255,255,.12);
+      --ink:              #f5f5f7;
+      --ink-muted-80:     #cccccc;
+      --ink-muted-48:     #86868b;
+      --primary:          #2997ff;
+      --primary-focus:    #409cff;
+      background: #1d1d1f;
+      color: #f5f5f7;
+    }
+
+    body.dark #header {
+      background: #272729;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+
+    body.dark .icon-btn,
+    body.dark .switch-role-btn {
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.12);
+      color: #f5f5f7;
+    }
+
+    body.dark .icon-btn:hover,
+    body.dark .switch-role-btn:hover {
+      background: rgba(255,255,255,.14);
+    }
+
+    body.dark .card,
+    body.dark .stat-card {
+      background: #272729;
+      border-color: rgba(255,255,255,.10);
+    }
+
+    body.dark .card-header {
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    body.dark .agent-card {
+      background: #272729;
+      border-color: rgba(255,255,255,.10);
+    }
+
+    body.dark .agent-card:hover {
+      border-color: var(--primary);
+    }
+
+    body.dark .agent-card.selected {
+      background: rgba(41,151,255,.10);
+      border-color: var(--primary);
+    }
+
+    body.dark .chat-shell {
+      border-color: rgba(255,255,255,.10);
+    }
+
+    body.dark .chat-msgs {
+      background: #1d1d1f;
+    }
+
+    body.dark .chat-input {
+      background: #272729;
+      border-color: rgba(255,255,255,.12);
+      color: #f5f5f7;
+    }
+
+    body.dark .chat-input:focus {
+      border-color: var(--primary);
+      background: #2a2a2c;
+    }
+
+    body.dark .chat-clear {
+      background: rgba(255,255,255,.07);
+      border-color: rgba(255,255,255,.12);
+      color: #86868b;
+    }
+
+    body.dark .msg.AGI .msg-bubble {
+      background: #2a2a2c;
+      border-color: rgba(255,255,255,.10);
+      color: #f5f5f7;
+    }
+
+    body.dark .quick-prompts {
+      background: #272729;
+      border-top-color: rgba(255,255,255,.08);
+    }
+
+    body.dark .qp-btn {
+      background: rgba(255,255,255,.07);
+      border-color: rgba(255,255,255,.12);
+      color: #2997ff;
+    }
+
+    body.dark .qp-btn:hover {
+      background: rgba(41,151,255,.12);
+      border-color: #2997ff;
+    }
+
+    body.dark .data-table th {
+      background: #2a2a2c;
+      color: #86868b;
+      border-bottom-color: rgba(255,255,255,.08);
+    }
+
+    body.dark .data-table td {
+      border-bottom-color: rgba(255,255,255,.06);
+      color: #f5f5f7;
+    }
+
+    body.dark .data-table tr:hover td {
+      background: #2a2a2c;
+    }
+
+    body.dark .form-input {
+      background: #272729;
+      border-color: rgba(255,255,255,.12);
+      color: #f5f5f7;
+    }
+
+    body.dark .job-form {
+      background: #2a2a2c;
+      border-color: rgba(255,255,255,.10);
+    }
+
+    body.dark .dag-container {
+      background: #2a2a2c;
+      border-color: rgba(255,255,255,.10);
+    }
+
+    body.dark .agent-node {
+      background: #272729;
+      border-color: rgba(255,255,255,.12);
+    }
+
+    body.dark .upload-zone {
+      background: #2a2a2c;
+      border-color: rgba(255,255,255,.15);
+    }
+
+    body.dark .upload-zone:hover {
+      border-color: #2997ff;
+      background: rgba(41,151,255,.08);
+    }
+
+    body.dark .modal {
+      background: #272729;
+    }
+
+    body.dark .modal-header,
+    body.dark .modal-footer {
+      border-color: rgba(255,255,255,.08);
+    }
+
+    body.dark .modal-close {
+      background: rgba(255,255,255,.08);
+      color: #f5f5f7;
+    }
+
+    body.dark .btn-secondary {
+      background: rgba(255,255,255,.07);
+      color: #2997ff;
+      border-color: #2997ff;
+    }
+
+    body.dark .btn-secondary:hover {
+      background: rgba(41,151,255,.12);
+    }
+
+    body.dark .progress-wrap {
+      background: rgba(255,255,255,.12);
+    }
+
+    body.dark .tag {
+      background: rgba(255,255,255,.08);
+      color: #86868b;
+    }
+
+    body.dark .src-chip {
+      background: rgba(255,255,255,.07);
+      border-color: rgba(255,255,255,.12);
+      color: #86868b;
+    }
+
+    body.dark .qa-btn {
+      background: #272729;
+      border-color: rgba(255,255,255,.10);
+      color: #f5f5f7;
+    }
+
+    body.dark .qa-btn:hover {
+      background: rgba(41,151,255,.10);
+      border-color: #2997ff;
+      color: #2997ff;
+    }
+
+    body.dark #content {
+      background: #1d1d1f;
+    }
   </style>
 </head>
 
@@ -2415,6 +2622,7 @@
         <div class="header-actions">
           <button class="icon-btn" title="通知">🔔</button>
           <button class="icon-btn" title="重新整理" onclick="refreshData()">🔄</button>
+          <button class="icon-btn theme-toggle" id="theme-toggle-btn" title="切換深色/淺色" onclick="toggleTheme()">🌙</button>
           <button class="switch-role-btn" onclick="switchRole()">切換角色</button>
         </div>
       </div>
@@ -3306,6 +3514,25 @@
 
   <!-- ══ JAVASCRIPT ══ -->
   <script>
+    // ─── Theme Toggle ─────────────────────────────────────────
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle('dark');
+      document.getElementById('theme-toggle-btn').textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    (function initTheme() {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.body.classList.add('dark');
+        document.addEventListener('DOMContentLoaded', () => {
+          const btn = document.getElementById('theme-toggle-btn');
+          if (btn) btn.textContent = '☀️';
+        });
+      }
+    })();
+
     // ─── Config ───────────────────────────────────────────────
     const CONFIG = {
       serverIP: '192.168.1.100',
