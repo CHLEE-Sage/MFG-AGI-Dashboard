@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manufacturing AI Portal — 封測廠智慧製造平台</title>
+  <title>Manufacturing AGI Portal — 封測廠智慧製造平台</title>
   <style>
     /* ============================================================
    設計系統 — CSS Variables
@@ -389,8 +389,8 @@
       background: var(--slate-200);
     }
 
-    /* ── Main Content ── */
-    #main {
+    /* ── MAGIn Content ── */
+    #mAGIn {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -541,7 +541,7 @@
       color: #7f1d1d;
     }
 
-    .pill.waiting {
+    .pill.wAGIting {
       background: var(--amber-100);
       color: #78350f;
     }
@@ -852,7 +852,7 @@
    ============================================================ */
 
     /* DAG visualization */
-    .dag-container {
+    .dag-contAGIner {
       background: var(--slate-50);
       border: 1px solid var(--slate-200);
       border-radius: var(--radius);
@@ -899,7 +899,7 @@
       box-shadow: 0 0 0 3px rgba(59, 130, 246, .15);
     }
 
-    .agent-node.status-waiting {
+    .agent-node.status-wAGIting {
       border-color: var(--slate-200);
       opacity: .7;
     }
@@ -1035,7 +1035,7 @@
     }
 
     /* ============================================================
-   AI ASSISTANTS PAGE
+   AGI ASSISTANTS PAGE
    ============================================================ */
     .agent-grid {
       display: grid;
@@ -1234,7 +1234,7 @@
       background: var(--brand-500);
     }
 
-    .msg.ai .msg-avatar {
+    .msg.AGI .msg-avatar {
       background: var(--slate-200);
     }
 
@@ -1254,7 +1254,7 @@
       border-radius: 12px 2px 12px 12px;
     }
 
-    .msg.ai .msg-bubble {
+    .msg.AGI .msg-bubble {
       background: #fff;
       border: 1px solid var(--slate-200);
       color: var(--brand-900);
@@ -1729,8 +1729,8 @@
 ══════════════════════════════════════════ -->
   <div id="role-screen">
     <div class="role-logo">
-      <h1>🏭 Manufacturing AI Portal</h1>
-      <p>AT · SmartManufacturing AI Platform</p>
+      <h1>🏭 Manufacturing AGI Portal</h1>
+      <p>AT · SmartManufacturing AGI Platform</p>
       <span class="badge"> 製程</span>
     </div>
 
@@ -1786,7 +1786,7 @@
     <!-- Sidebar -->
     <nav id="sidebar">
       <div class="sidebar-logo">
-        <div class="name">🏭 AI Portal</div>
+        <div class="name">🏭 AGI Portal</div>
         <div class="sub">AT</div>
       </div>
       <div class="role-indicator">
@@ -1800,7 +1800,7 @@
           <span class="nav-icon">🏠</span> Dashboard
         </div>
         <div class="nav-item" onclick="nav('assistants',this)">
-          <span class="nav-icon">🤖</span> AI Assistants
+          <span class="nav-icon">🤖</span> AGI Assistants
         </div>
         <div class="nav-item" onclick="nav('pipeline',this)" id="nav-pipeline">
           <span class="nav-icon">⚡</span> Pipeline Monitor
@@ -1832,8 +1832,8 @@
       </div>
     </nav>
 
-    <!-- Main -->
-    <div id="main">
+    <!-- MAGIn -->
+    <div id="mAGIn">
       <div id="header">
         <div class="header-title" id="page-title">Dashboard</div>
         <div class="header-actions">
@@ -2044,7 +2044,7 @@
                   </div>
                 </div>
                 <div style="margin-top:12px; padding:10px; background:var(--red-100); border-radius:6px;">
-                  <div class="text-sm font-bold text-red">⚠️ AI 診斷：Final Test 良率低於目標值 (80%)</div>
+                  <div class="text-sm font-bold text-red">⚠️ AGI 診斷：Final Test 良率低於目標值 (80%)</div>
                   <div class="text-xs text-muted" style="margin-top:3px">建議啟動 RCA 分析。可能原因：Probe card 老化 + 溫度異常。</div>
                 </div>
               </div>
@@ -2052,11 +2052,11 @@
           </div>
         </div>
 
-        <!-- ══ AI ASSISTANTS PAGE ══ -->
+        <!-- ══ AGI ASSISTANTS PAGE ══ -->
         <div class="page" id="page-assistants">
           <div class="section-header">
             <div>
-              <div class="section-title">🤖 AI Assistants</div>
+              <div class="section-title">🤖 AGI Assistants</div>
               <div class="section-sub">選擇助手，開始對話</div>
             </div>
           </div>
@@ -2166,7 +2166,7 @@
             </div>
           </div>
 
-          <!-- Active job detail -->
+          <!-- Active job detAGIl -->
           <div class="card">
             <div class="card-header">
               <span>🔍</span>
@@ -2191,7 +2191,7 @@
               </div>
 
               <!-- 9-Agent DAG -->
-              <div class="dag-container">
+              <div class="dag-contAGIner">
                 <div class="dag-wrap">
                   <!-- Row 1: Trigger -->
                   <div class="dag-row">
@@ -2240,25 +2240,25 @@
 
                   <!-- Row 4: Risk + CAP -->
                   <div class="dag-row">
-                    <div class="agent-node status-waiting">
+                    <div class="agent-node status-wAGIting">
                       <div class="agent-id">A6</div>
                       <div class="agent-name">風險評估 (Risk)</div>
-                      <div class="agent-stat"><span class="pill waiting" style="font-size:9px">⌛ 等待</span></div>
+                      <div class="agent-stat"><span class="pill wAGIting" style="font-size:9px">⌛ 等待</span></div>
                     </div>
-                    <div class="agent-node status-waiting">
+                    <div class="agent-node status-wAGIting">
                       <div class="agent-id">A7</div>
                       <div class="agent-name">矯正措施 (CAP)</div>
-                      <div class="agent-stat"><span class="pill waiting" style="font-size:9px">⌛ 等待</span></div>
+                      <div class="agent-stat"><span class="pill wAGIting" style="font-size:9px">⌛ 等待</span></div>
                     </div>
                   </div>
                   <div class="dag-arrow">↓</div>
 
                   <!-- Row 5: Report -->
                   <div class="dag-row">
-                    <div class="agent-node status-waiting">
+                    <div class="agent-node status-wAGIting">
                       <div class="agent-id">A8</div>
                       <div class="agent-name">MRAT 報告 & 通知</div>
-                      <div class="agent-stat"><span class="pill waiting" style="font-size:9px">⌛ 等待</span></div>
+                      <div class="agent-stat"><span class="pill wAGIting" style="font-size:9px">⌛ 等待</span></div>
                     </div>
                   </div>
                 </div>
@@ -2631,7 +2631,7 @@
         </div>
 
       </div><!-- end #content -->
-    </div><!-- end #main -->
+    </div><!-- end #mAGIn -->
   </div><!-- end #app -->
 
   <!-- ══ MODALS ══ -->
@@ -2678,7 +2678,7 @@
               <label class="form-label">完成通知</label>
               <select class="form-input">
                 <option>瀏覽器推播</option>
-                <option>Email</option>
+                <option>EmAGIl</option>
                 <option>兩者都要</option>
               </select>
             </div>
@@ -2720,7 +2720,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal('modal-8d')">取消</button>
-        <button class="btn btn-primary" onclick="submit8D()">✨ AI 生成 8D 草稿</button>
+        <button class="btn btn-primary" onclick="submit8D()">✨ AGI 生成 8D 草稿</button>
       </div>
     </div>
   </div>
@@ -2786,7 +2786,7 @@
 
       const titles = {
         dashboard: '🏠 Dashboard',
-        assistants: '🤖 AI Assistants',
+        assistants: '🤖 AGI Assistants',
         pipeline: '⚡ Pipeline Monitor',
         reports: '📊 Auto Reports',
         knowledge: '📚 知識庫管理',
@@ -2872,12 +2872,12 @@
     };
 
     const OFFLINE_REPLIES = {
-      process_eng: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\nMCX A10 Wire Bonder 的 bonding force 標準值通常介於 **18–25 gf**（第一焊點）與 **12–18 gf**（第二焊點），實際值需依 wire 規格（1.0–1.2 mil Au wire）、die pad 材質與 substrate 條件調整。建議參考設備廠商（K&S / ASM）的 Process Guideline，並透過 DOE 驗證最佳視窗。',
-      rca: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\n**8D 報告框架**：\n- D1：組建跨職能團隊（製程、設備、品質）\n- D2：問題描述（5W2H：何時、何地、何物、多少、如何）\n- D3：立即圍堵行動（ICA）\n- D4：根本原因分析（5-Why + 魚骨圖）\n- D5：永久矯正措施（PCA）\n- D6：驗證 PCA 有效性\n- D7：預防再發（橫向展開、FMEA 更新）\n- D8：團隊表揚與結案',
-      yield: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\n良率從 95% 降至 88% 的排查順序：\n1. 確認失效時間點 → 對照製程變更記錄（ECN）\n2. 分析 Wafer Map → 判斷 systematic（邊緣/中心）或 random 分佈\n3. 查看 Bin 分布 → 定位失效類別（電性/機械/外觀）\n4. 比對設備 log → 確認 SPC 是否有異常訊號\n5. 取樣 FA 分析 → 確認失效機制',
-      equipment: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\nWire Bonder E-034 警報通常表示 **EFO（Electric Flame-Off）電流異常**。排查步驟：\n1. 檢查 EFO 棒間距（標準：400–500 μm）\n2. 清潔 EFO 棒，確認無氧化或汙染\n3. 確認 wire clamp 夾力正常\n4. 檢查 tail bond 長度設定\n5. 若持續異常，更換 EFO 棒並重新校正',
-      literature: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\n**Fan-Out Panel Level Packaging (FOPLP)** 近期研究重點：\n- 與 FOWLP 相比，panel 尺寸（600×600mm）可提升 substrate 利用率 3–5 倍\n- 主要挑戰：die shift（<10μm 要求）、warpage 控制、RDL 良率\n- 代表廠商：Samsung FOPLP、ASE SESUB、Fraunhofer IZM\n- 建議搜尋：IEEE ECTC 2024、IMAPS 2024 相關論文',
-      code: '⚠️ 目前 AI 伺服器未連線，以下為示範回覆：\n\n```python\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# 讀取 WAT 資料\ndf = pd.read_csv("wat_data.csv")\nparam = "Vt_NMOS"  # 替換為目標參數\n\n# 計算 SPC 管制線\nmean = df[param].mean()\nstd = df[param].std()\nucl, lcl = mean + 3*std, mean - 3*std\n\n# 繪製 X-bar 管制圖\nplt.figure(figsize=(12, 4))\nplt.plot(df[param], "b-o", markersize=4, label=param)\nplt.axhline(mean, color="green", label=f"CL={mean:.4f}")\nplt.axhline(ucl, color="red", linestyle="--", label=f"UCL={ucl:.4f}")\nplt.axhline(lcl, color="red", linestyle="--", label=f"LCL={lcl:.4f}")\nplt.title(f"SPC 管制圖 — {param}")\nplt.legend(); plt.tight_layout(); plt.savefig("spc_chart.png", dpi=150)\nprint("✅ SPC 圖已儲存為 spc_chart.png")\n```',
+      process_eng: '⚠️ 目前 AGI 伺服器未連線，以下為示範回覆：\n\nMCX A10 Wire Bonder 的 bonding force 標準值通常介於 **18–25 gf**（第一焊點）與 **12–18 gf**（第二焊點），實際值需依 wire 規格（1.0–1.2 mil Au wire）、die pad 材質與 substrate 條件調整。建議參考設備廠商（K&S / ASM）的 Process Guideline，並透過 DOE 驗證最佳視窗。',
+      rca: '⚠️ 目前 AGI 伺服器未連線，以下為示範回覆：\n\n**8D 報告框架**：\n- D1：組建跨職能團隊（製程、設備、品質）\n- D2：問題描述（5W2H：何時、何地、何物、多少、如何）\n- D3：立即圍堵行動（ICA）\n- D4：根本原因分析（5-Why + 魚骨圖）\n- D5：永久矯正措施（PCA）\n- D6：驗證 PCA 有效性\n- D7：預防再發（橫向展開、FMEA 更新）\n- D8：團隊表揚與結案',
+      yield: '⚠️ 目前 AGI 伺服器未連線，以下為示範回覆：\n\n良率從 95% 降至 88% 的排查順序：\n1. 確認失效時間點 → 對照製程變更記錄（ECN）\n2. 分析 Wafer Map → 判斷 systematic（邊緣/中心）或 random 分佈\n3. 查看 Bin 分布 → 定位失效類別（電性/機械/外觀）\n4. 比對設備 log → 確認 SPC 是否有異常訊號\n5. 取樣 FA 分析 → 確認失效機制',
+      equipment: '⚠️ 目前 AGI 伺服器未連線，以下為示範回覆：\n\nWire Bonder E-034 警報通常表示 **EFO（Electric Flame-Off）電流異常**。排查步驟：\n1. 檢查 EFO 棒間距（標準：400–500 μm）\n2. 清潔 EFO 棒，確認無氧化或汙染\n3. 確認 wire clamp 夾力正常\n4. 檢查 tAGIl bond 長度設定\n5. 若持續異常，更換 EFO 棒並重新校正',
+      literature: '⚠️ 目前 AGI 伺服器未連線，以下為示範回覆：\n\n**Fan-Out Panel Level Packaging (FOPLP)** 近期研究重點：\n- 與 FOWLP 相比，panel 尺寸（600×600mm）可提升 substrate 利用率 3–5 倍\n- 主要挑戰：die shift（<10μm 要求）、warpage 控制、RDL 良率\n- 代表廠商：Samsung FOPLP、ASE SESUB、Fraunhofer IZM\n- 建議搜尋：IEEE ECTC 2024、IMAPS 2024 相關論文',
+      code: '⚠️ 目前 AGI 伺服器未連線，以下為示範回覆：\n\n```python\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# 讀取 WAT 資料\ndf = pd.read_csv("wat_data.csv")\nparam = "Vt_NMOS"  # 替換為目標參數\n\n# 計算 SPC 管制線\nmean = df[param].mean()\nstd = df[param].std()\nucl, lcl = mean + 3*std, mean - 3*std\n\n# 繪製 X-bar 管制圖\nplt.figure(figsize=(12, 4))\nplt.plot(df[param], "b-o", markersize=4, label=param)\nplt.axhline(mean, color="green", label=f"CL={mean:.4f}")\nplt.axhline(ucl, color="red", linestyle="--", label=f"UCL={ucl:.4f}")\nplt.axhline(lcl, color="red", linestyle="--", label=f"LCL={lcl:.4f}")\nplt.title(f"SPC 管制圖 — {param}")\nplt.legend(); plt.tight_layout(); plt.savefig("spc_chart.png", dpi=150)\nprint("✅ SPC 圖已儲存為 spc_chart.png")\n```',
     };
 
     let chatHistory = [];
@@ -2911,7 +2911,7 @@
     async function checkConnection() {
       const badge = document.getElementById('chat-conn-badge');
       try {
-        const res = await fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/health`, {
+        const res = awAGIt fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/health`, {
           method: 'GET', signal: AbortSignal.timeout(3000)
         });
         if (res.ok) {
@@ -2956,7 +2956,7 @@
     function showTyping() {
       const msgs = document.getElementById('chat-msgs');
       const div = document.createElement('div');
-      div.className = 'msg ai';
+      div.className = 'msg AGI';
       div.id = 'typing-indicator';
       div.innerHTML = `<div class="msg-avatar">🤖</div><div class="msg-bubble"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
       msgs.appendChild(div);
@@ -2982,13 +2982,13 @@
       appendMsg('user', userText);
       chatHistory.push({ role: 'user', content: userText });
 
-      const online = await checkConnection();
+      const online = awAGIt checkConnection();
       if (!online) {
         showTyping();
-        await new Promise(r => setTimeout(r, 800));
+        awAGIt new Promise(r => setTimeout(r, 800));
         removeTyping();
-        const reply = OFFLINE_REPLIES[currentAgent] || '⚠️ AI 伺服器未連線，請確認伺服器狀態後重試。';
-        appendMsg('ai', reply);
+        const reply = OFFLINE_REPLIES[currentAgent] || '⚠️ AGI 伺服器未連線，請確認伺服器狀態後重試。';
+        appendMsg('AGI', reply);
         chatHistory.push({ role: 'assistant', content: reply });
         isStreaming = false;
         document.getElementById('chat-send').disabled = false;
@@ -3003,7 +3003,7 @@
       ];
 
       try {
-        const res = await fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/v1/chat/completions`, {
+        const res = awAGIt fetch(`http://${CONFIG.serverIP}:${CONFIG.vllmPort}/v1/chat/completions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -3021,13 +3021,13 @@
         removeTyping();
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        const textNode = appendMsg('ai', '');
+        const textNode = appendMsg('AGI', '');
         let fullReply = '';
 
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         while (true) {
-          const { done, value } = await reader.read();
+          const { done, value } = awAGIt reader.read();
           if (done) break;
           const chunk = decoder.decode(value, { stream: true });
           for (const line of chunk.split('\n')) {
@@ -3047,7 +3047,7 @@
 
       } catch (err) {
         removeTyping();
-        appendMsg('ai', `❌ 連線錯誤：${err.message}\n請確認 vLLM 伺服器正在運行（http://${CONFIG.serverIP}:${CONFIG.vllmPort}）`);
+        appendMsg('AGI', `❌ 連線錯誤：${err.message}\n請確認 vLLM 伺服器正在運行（http://${CONFIG.serverIP}:${CONFIG.vllmPort}）`);
       }
 
       isStreaming = false;
@@ -3114,7 +3114,7 @@
 
     function submit8D() {
       closeModal('modal-8d');
-      showToast('✨ AI 正在生成 8D 報告草稿，請稍候...', 'info');
+      showToast('✨ AGI 正在生成 8D 報告草稿，請稍候...', 'info');
     }
 
     // ─── Toast ───────────────────────────────────────────────

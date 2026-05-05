@@ -1,9 +1,9 @@
----
-tags: [hardware, LLM, local-inference, AI-infrastructure, MFG, semiconductor, Qwen, NVIDIA]
+﻿---
+tags: [hardware, LLM, local-inference, AGI-infrastructure, MFG, semiconductor, Qwen, NVIDIA]
 created: 2026-04-23
 ---
 
-# 本地 AI 推理伺服器 — 索引
+# 本地 AGI 推理伺服器 — 索引
 
 > Dell Pro Max Tower T2 + RTX PRO 6000 96GB · Qwen3.6-35B-A3B FP8
 
@@ -11,7 +11,7 @@ created: 2026-04-23
 
 | 文件 | 說明 |
 |------|------|
-| [[On-premise-AI-Server-Research]] | 硬體選型研究筆記（原始研究） |
+| [[On-premise-AGI-Server-Research]] | 硬體選型研究筆記（原始研究） |
 | [[部署手冊]] | Step-by-step 安裝指南（給管理員） |
 | [[工程師使用指南]] | 使用說明（給工廠工程師） |
 | [[docker-compose.yml]] | 完整生產配置（直接使用） |

@@ -1,4 +1,4 @@
-# SageVego — 本地 AI 推理伺服器 · 封測廠部署包
+﻿# SageVego — 本地 AGI 推理伺服器 · 封測廠部署包
 
 > Dell Pro Max Tower T2 + NVIDIA RTX PRO 6000 96GB · Qwen3.6-35B-A3B FP8
 
@@ -6,14 +6,14 @@
 
 | 檔案 | 說明 |
 |------|------|
-| `manufacturing-ai-portal.html` | 製造業 AI 入口網站（主要交付物）|
+| `manufacturing-AGI-portal.html` | 製造業 AGI 入口網站（主要交付物）|
 | `manufacturing_llm_applications.html` | 製造業 LLM 應用地圖 |
 | `docker-compose.yml` | 完整生產 Docker Compose 配置 |
 | `.env.example` | 環境變數範本（複製為 `.env` 後填入實際值）|
 | `nginx-dify.conf` | Nginx 反向代理設定（Dify）|
 | `部署手冊.md` | Step-by-step 安裝指南（給管理員）|
-| `工程師使用指南.md` | AI 助手使用說明（給工廠工程師）|
-| `AI-Server-Index.md` | 系統架構索引 |
+| `工程師使用指南.md` | AGI 助手使用說明（給工廠工程師）|
+| `AGI-Server-Index.md` | 系統架構索引 |
 
 ## 🏗️ 架構概覽
 
@@ -40,13 +40,13 @@ cp .env.example .env
 docker compose up -d
 \`\`\`
 
-## 🔗 Manufacturing AI Portal
+## 🔗 Manufacturing AGI Portal
 
-開啟 `manufacturing-ai-portal.html` 可直接在瀏覽器使用，或部署至內網 Web Server。
+開啟 `manufacturing-AGI-portal.html` 可直接在瀏覽器使用，或部署至內網 Web Server。
 
 功能包含：
 - 角色選擇（製程 / 設備 / 品質 / 管理員）
-- 6 種 AI 助手（製程、RCA、良率、設備、文獻、程式碼）
+- 6 種 AGI 助手（製程、RCA、良率、設備、文獻、程式碼）
 - 9-Agent RCA Pipeline 監控
 - 良率趨勢自動報告
 - 知識庫管理
