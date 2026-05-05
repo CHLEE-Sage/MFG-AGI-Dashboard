@@ -1,5 +1,5 @@
 ---
-tags: [hardware, LLM, local-inference, AI-infrastructure, BlueVelo, semiconductor, Qwen, NVIDIA]
+tags: [hardware, LLM, local-inference, AI-infrastructure, MFG, semiconductor, Qwen, NVIDIA]
 created: 2026-04-23
 ---
 
